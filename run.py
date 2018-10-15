@@ -1,8 +1,9 @@
 import os
 from application.app import create_app
 
-app=create_app('FLASK_ENV')
+config_name=os.getenv('FLASK_ENV')
+app=create_app(config_name)
 
-if __name__ == '__main__':
+if __name__== '__main__':
     app.run()
 

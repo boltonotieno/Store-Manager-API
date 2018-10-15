@@ -2,8 +2,8 @@ from flask import Flask, Blueprint
 from flask_restplus import Api
 from instance.config import app_config
 
-blue=Blueprint('api', __name__)
-api=Api(blue)
+blue = Blueprint('api', __name__)
+api = Api(blue)
 
 # Create our application
 def create_app(config_name):
@@ -11,8 +11,7 @@ def create_app(config_name):
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     
-    # register out Blueprint
-    app.register_blueprint(blue,url_prefix='/api/v1')
-
+    # register Blueprint
+    app.register_blueprint(blue, url_prefix='/api/v1')
 
     return app
