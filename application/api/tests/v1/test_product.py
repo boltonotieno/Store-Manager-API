@@ -1,7 +1,7 @@
 import unittest
 import os
 import json
-from application import create_app
+from application.app import create_app
 
 class TestProducts(unittest.TestCase):
     """Product TestCases Class"""
@@ -20,10 +20,25 @@ class TestProducts(unittest.TestCase):
         }
 
     def test_post_product(self):
-        """Test if API can post new products"""
-        response = self.client.post('/product', data=self.data)
-
+        """Test if API can POST new products"""
+        response = self.client.post('/api/v1product', data=self.data)
         self.assertEqual(response.status_code, 201)
+
+    def test_get_all_products(self):
+        """Test if API can GET all products"""
+        response = self.client.post('/api/v1product', data=self.data)
+        self.assertEqual(response.status_code, 201)
+        
+        response= self.client.get('/api/v1/product')
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_product_by_id(self):
+        """Test if API can GET single product by id"""
+        response = self.client.post('/api/v1/product', self.data)
+        self.assertEqual(response.status_code, 201)
+
+        response = self.client.get('/api/v1/product/1')
+        self.assertEqual(response.status_code, 200)
 
 
     def tearDown(self):
