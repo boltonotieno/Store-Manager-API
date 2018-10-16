@@ -16,6 +16,7 @@ class TestProducts(unittest.TestCase):
             'name' : 'Pilsner',
             'price' : '200',
             'quantity' : '20',
+            'min_quantity' : '5',
             'category' : 'beer'
         }
 
