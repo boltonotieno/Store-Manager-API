@@ -1,10 +1,12 @@
 from flask import Flask, make_response, jsonify, request
 from flask_restful import Api, Resource
-from ..models.product import Product
+from ..models.product_model import Product
 import json
 
 class Products(Resource):
+    """This class contain methods for product endpoints"""
     def post(self):
+        """This method handles post requsts to add new products"""
         data = request.get_json()
         name = data.get('name').strip()
         price = data.get('price').strip()
