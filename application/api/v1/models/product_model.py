@@ -11,7 +11,7 @@ class Product(object):
         self.category = category
         
     def create_product(self):
-        """Create a new product"""
+        """Creates a new product"""
         product = dict(
             product_id=len(self.products)+1,
             product_name = self.name,
