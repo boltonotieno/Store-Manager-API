@@ -1,0 +1,4 @@
+{
+  "application/api/tests/v1/test_product.py": true, 
+  "application/tests/v1/test_product.py": true
+}
