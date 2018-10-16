@@ -21,15 +21,20 @@ class TestProducts(unittest.TestCase):
 
     def test_post_product(self):
         """Test if API can POST new products"""
-        response = self.client.post('/api/v1product', data=self.data)
+        response = self.client.post('/api/v1/product', data=self.data)
+        
+        result = json.loads(response.data.decode())
+        self.assertEqual(result['message'], 'success' )
         self.assertEqual(response.status_code, 201)
 
     def test_get_all_products(self):
         """Test if API can GET all products"""
-        response = self.client.post('/api/v1product', data=self.data)
+        response = self.client.post('/api/v1/product', data=self.data)
         self.assertEqual(response.status_code, 201)
         
         response= self.client.get('/api/v1/product')
+        result = json.loads(response.data.decode())
+        self.assertEqual(result['message'], 'success')
         self.assertEqual(response.status_code, 200)
 
     def test_get_product_by_id(self):
@@ -38,8 +43,9 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
         response = self.client.get('/api/v1/product/1')
+        result = json.loads(response.data.decode())
+        self.assertEqual(result['message'], 'success')
         self.assertEqual(response.status_code, 200)
-
 
     def tearDown(self):
         """Removes all initialised variables"""

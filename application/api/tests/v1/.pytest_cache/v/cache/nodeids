@@ -1,1 +1,5 @@
-[]
+[
+  "test_product.py::TestProducts::test_get_all_products",
+  "test_product.py::TestProducts::test_get_product_by_id",
+  "test_product.py::TestProducts::test_post_product"
+]
