@@ -25,3 +25,6 @@ class Product(object):
 
         return {'message' : 'Created successfully'}
 
+    def get_all_product(self):
+        """Fetches all products"""
+        return {'Products' : self.products, 'message' : 'success' }
