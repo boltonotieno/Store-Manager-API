@@ -7,7 +7,7 @@ class TestProducts(unittest.TestCase):
     """Sales TestCases Class"""
 
     def setUp(self):
-        """ Define test variables"""
+        """ Define tests variables"""
         self.app = create_app(config_name='testing')
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
