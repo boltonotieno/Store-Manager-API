@@ -1,24 +1,19 @@
 
 class Product(object):
     """Class contain product model functions"""
-    products = [] 
-    def __init__(self, name, price, quantity, min_quantity, category):
+    def __init__(self):
         """Initialises the product model"""
-        self.name = name
-        self.price = price
-        self.quantity= quantity
-        self.min_quantity= min_quantity
-        self.category = category
+        self.products = []
         
-    def create_product(self):
+    def create_product(self, name, price, quantity, min_quantity, category):
         """Creates a new product"""
         product = dict(
             product_id=len(self.products)+1,
-            product_name = self.name,
-            product_price = self.price,
-            product_quantity = self.quantity,
-            product_min_quantity = self.min_quantity,
-            product_category = self.category
+            product_name = name,
+            product_price = price,
+            product_quantity =quantity,
+            product_min_quantity = min_quantity,
+            product_category = category
         )
 
         self.products.append(product)
