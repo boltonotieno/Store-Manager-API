@@ -23,4 +23,9 @@ class Products(Resource):
 
     def get(self):
         """This method handles get requests to fetch all products"""
-        pass
+        product_obj= Product()
+        response = jsonify(product_obj.get_all_product())
+        response.status_code = 200
+
+        return response
+

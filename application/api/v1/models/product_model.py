@@ -1,9 +1,10 @@
 
 class Product(object):
     """Class contain product model functions"""
+    products = []
     def __init__(self):
         """Initialises the product model"""
-        self.products = []
+        # self.products = []
         
     def create_product(self, name, price, quantity, min_quantity, category):
         """Creates a new product"""
