@@ -1,4 +1,3 @@
 {
-  "application/api/tests/v1/test_product.py::TestProducts::test_get_product_by_id": true,
   "application/tests/v1/test_product.py": true
 }

@@ -26,7 +26,8 @@ class Product(object):
         return {'Products' : self.products, 'message' : 'success' }
 
     def get_one_product(self, product_id):
-        if product_id in self.products:
-            return {'Product' : self.products[product_id], 'message' : 'success'}
+        product_dict = [product for product in self.products if product['product_id'] == product_id]
+        if product_id:
+            return {'Product' : product_dict, 'message' : 'success'}
         return {'message' : 'Not found'}
 
