@@ -9,9 +9,10 @@ class Sales(Resource):
         """This method handles post requsts to create new sales"""
         data = request.get_json()
         name = data.get('name').strip()
+        price = data.get('price').strip()
         quantity = data.get('quantity').strip()
 
-        single_sale = Sale(name, quantity)
+        single_sale = Sale(name, price, quantity)
         
         response = jsonify(single_sale.create_sale())
         response.status_code = 201

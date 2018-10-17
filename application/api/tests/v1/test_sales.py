@@ -14,6 +14,7 @@ class TestProducts(unittest.TestCase):
         self.app_context.push()
         self.data = {
             'name' : 'Tusker',
+            'price' : '200',
             'quantity' : '5'
         }
 
