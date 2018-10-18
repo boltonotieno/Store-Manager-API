@@ -12,10 +12,19 @@ class Sales(Resource):
         price = data.get('price').strip()
         quantity = data.get('quantity').strip()
 
-        single_sale = Sale(name, price, quantity)
+        single_sale = Sale()
         
-        response = jsonify(single_sale.create_sale())
+        response = jsonify(single_sale.create_sale(name, price, quantity))
         response.status_code = 201
+
+        return response
+
+    def get(self):
+        """This method handles get requests to fetch all sales"""
+        sale_objs = Sale()
+
+        response = jsonify(sale_objs.get_all_sale())
+        response.status_code = 200
 
         return response
 
