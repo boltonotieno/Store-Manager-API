@@ -4,6 +4,7 @@ python:
 - 3.6
 install:
 - pip install -r requirements.txt
+- pip install codeclimate-test-reporter
 
 script:
 - pytest --cov-report term-missing --cov=application
@@ -11,3 +12,4 @@ script:
 
 after_success:
 - coveralls
+- codeclimate-test-reporter
