@@ -44,18 +44,18 @@ class TestAuthentication(unittest.TestCase):
         self.assertEqual(result['message'], 'User named jdoe was created' )
         self.assertEqual(response.status_code, 201)
 
-    def test_registration_of_existing_users(self):
-        """Test registration of existing users"""
-        response = self.client.post('/api/v1/auth/registration', 
-        data= json.dumps(self.data),
-        content_type='application/json')
+    # def test_registration_of_existing_users(self):
+    #     """Test registration of existing users"""
+    #     response = self.client.post('/api/v1/auth/registration', 
+    #     data= json.dumps(self.data),
+    #     content_type='application/json')
 
-        response = self.client.post('/api/v1/auth/registration', 
-        data= json.dumps(self.data_2),
-        content_type='application/json')
+    #     response = self.client.post('/api/v1/auth/registration', 
+    #     data= json.dumps(self.data_2),
+    #     content_type='application/json')
         
-        result = json.loads(response.data)
-        self.assertEqual(result['message'], 'User named jdoe already exist')
+    #     result = json.loads(response.data)
+    #     self.assertEqual(result['message'], 'User named jdoe already exist')
 
     def test_empty_fields(self):
         """Test registration with missing username"""

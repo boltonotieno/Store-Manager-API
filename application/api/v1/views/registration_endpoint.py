@@ -20,16 +20,16 @@ class UserRegistration(Resource):
         name = data['name']
         username = data['username']
         email = data['email']
-        password = data['password']
+        password = sha256_crypt.encrypt(data['password'])
         gender = data['gender']
         role = ['role']
 
         new_user = Users(name,username,email,password,gender,role)
 
-        # if new_user.search_by_username(data['username']):
-        #     return {
-        #         'message' : 'User named {} already exist'.format( data['username'])
-        #      }
+        if new_user.search_by_username(data['username']):
+            return {
+                'message' : 'User named {} already exist'.format( data['username'])
+             }
 
         try:
             new_user.create_user()
