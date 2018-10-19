@@ -22,7 +22,7 @@ class Sale():
         self.sales.append(sale)
 
         return {'Sales' : self.sales, 'message' : 'Created successfully'}
-
+    
     def get_all_sale(self):
         """Fetches all sales"""
         if len(self.sales) == 0:
