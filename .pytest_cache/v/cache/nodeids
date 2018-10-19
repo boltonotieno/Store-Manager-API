@@ -3,6 +3,8 @@
   "application/api/tests/v1/test_product.py::TestProducts::test_get_product_by_id",
   "application/api/tests/v1/test_product.py::TestProducts::test_post_product",
   "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_empty_fields",
+  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_get_all_users",
+  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_get_user_by_id",
   "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login",
   "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_invalid_username",
   "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_missing_field",

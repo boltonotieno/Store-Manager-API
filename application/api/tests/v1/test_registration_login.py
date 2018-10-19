@@ -47,6 +47,10 @@ class TestAuthentication(unittest.TestCase):
     def test_registration_of_existing_users(self):
         """Test registration of existing users"""
         response = self.client.post('/api/v1/auth/registration', 
+        data= json.dumps(self.data),
+        content_type='application/json')
+
+        response = self.client.post('/api/v1/auth/registration', 
         data= json.dumps(self.data_2),
         content_type='application/json')
         
@@ -70,7 +74,7 @@ class TestAuthentication(unittest.TestCase):
 
     def test_get_all_users(self):
         """Test if API can GET all users"""
-        response = self.client.post('/api/v1/users', 
+        response = self.client.post('/api/v1/auth/registration', 
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -82,7 +86,7 @@ class TestAuthentication(unittest.TestCase):
 
     def test_get_user_by_id(self):
         """Test if API can GET single user by id"""
-        response = self.client.post('/api/v1/users/<int:user_id>', 
+        response = self.client.post('/api/v1/auth/registration', 
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -135,5 +139,8 @@ class TestAuthentication(unittest.TestCase):
         result = json.loads(response.data)
         self.assertEquals(result['message'], {"password": "This field cannot be blank"})
 
+    def tearDown(self):
+        """Removes all initialised variables"""
+        self.app_context.pop()
 
 

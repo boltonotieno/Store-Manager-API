@@ -8,7 +8,7 @@ class Users():
         self.name = name
         self.username = username
         self.email = email
-        self.password = email
+        self.password = password
         self.gender = gender
         self.role = role
         
@@ -16,6 +16,7 @@ class Users():
     def create_user(self):
         """Creates a new user"""
         new_user = dict(
+            id = len(Users.users_dict)+1,
             name = self.name,
             username = self.username,
             email = self.email,
@@ -32,12 +33,14 @@ class Users():
         """search for existing user"""
         user = [user for user in self.users_dict if user['username'] == username]
         return user
-
     
     def get_all_users(self):
         """Fetches all users"""
-        pass
+        return Users.users_dict
 
     def get_one_user(self, user_id):
         """Fetches one user by id"""
-        pass
+        user = [user for user in self.users_dict if user['user_id'] == user_id]
+
+        return user
+

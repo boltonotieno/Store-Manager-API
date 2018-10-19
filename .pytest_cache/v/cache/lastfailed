@@ -1,6 +1,8 @@
 {
+  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_get_user_by_id": true,
   "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login": true,
   "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_invalid_username": true,
   "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_missing_field": true,
-  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_wrong_passoword": true
+  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_wrong_passoword": true,
+  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_registration": true
 }
