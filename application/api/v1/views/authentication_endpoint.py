@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from ..models.user_model import Users
 from passlib.hash import sha256_crypt
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, 
 jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 from flask import jsonify
@@ -25,7 +26,7 @@ class UserRegistration(Resource):
         name = data['name']
         username = data['username']
         email = data['email']
-        password = sha256_crypt.encrypt((data['password']))
+        password = generate_password_hash((data['password']))
         gender = data['gender']
         role = data['role']
 
@@ -78,7 +79,7 @@ class UserLogin(Resource):
                 'message' : 'user {} does not exist'.format( data['username'])
             }
 
-        if sha256_crypt.verify(data["password"], user[0][0]["password"]):
+        if check_password_hash(data["password"], user[0][0]["password"]):
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
             return {
