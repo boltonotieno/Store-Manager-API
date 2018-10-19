@@ -26,7 +26,7 @@ class UserRegistration(Resource):
         name = data['name']
         username = data['username']
         email = data['email']
-        password = generate_password_hash((data['password']))
+        password = sha256_crypt.encrypt((data['password']))
         gender = data['gender']
         role = data['role']
 
@@ -79,7 +79,7 @@ class UserLogin(Resource):
                 'message' : 'user {} does not exist'.format( data['username'])
             }
 
-        if check_password_hash(data["password"], user[0][0]["password"]):
+        if sha256_crypt.verify(data["password"], user[0][0]["password"]):
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
             return {
