@@ -1,7 +1,7 @@
+users_dict = {}
+
 class Users():
     """Class contain user model functions"""
-
-    users_dict = []
 
     def __init__(self):
         """Initialises the user model"""
@@ -15,38 +15,37 @@ class Users():
     
     def create_user(self, name, username, email, password, gender, role):
         """Creates a new user"""
+
+        if username in users_dict:
+            return {
+                'message' : 'User named {} already exist'.format( username)
+            }
         new_user = dict(
-            user_id = len(Users.users_dict)+1,
             name = name,
             username = username,
             email = email,
             password = password, 
             gender = gender,
             role = role    
-        )
+        )  
 
-        self.users_dict.append(new_user)
+        users_dict[username] = new_user
 
-        return self.users_dict
-
-    def search_by_username(self, username):
-        """search for existing user"""
-        user = [user for user in self.users_dict if user['username'] == username]
-        return user
+        return users_dict
     
     def get_all_users(self):
         """Fetches all users"""
-        return Users.users_dict
+        return users_dict
 
-    def get_one_user(self, user_id):
+    def get_one_user(self, username):
         """Fetches one user by id"""
-        user = [user for user in self.users_dict if user['user_id'] == user_id]
 
-        if user:
-            return {'User' : user, 'message' : 'success'}
-        return {'message' : 'Not found'}
+        if username in users_dict:
+            return {'User' : users_dict[username], 'message' : 'success'}
+        else:
+            return {'message' : 'Not found'}
 
 
     def get_user_dict(self):
 
-        return Users.users_dict
+        return users_dict

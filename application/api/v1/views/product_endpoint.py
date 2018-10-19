@@ -5,6 +5,7 @@ import json
 
 class Products(Resource):
     """This class contain methods for product endpoints"""
+    
     def post(self):
         """This method handles post requsts to add new products"""
         data = request.get_json()

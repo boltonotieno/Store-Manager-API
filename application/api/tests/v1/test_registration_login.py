@@ -91,7 +91,7 @@ class TestAuthentication(unittest.TestCase):
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        response = self.client.get('/api/v1/users/1')
+        response = self.client.get('/api/v1/users/jdoe')
         result = json.loads(response.data)
         self.assertEqual(result['message'], 'success')
         self.assertEqual(response.status_code, 200)

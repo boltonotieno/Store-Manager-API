@@ -9,7 +9,10 @@ def create_app(config_name):
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     app.config['SECRET_KEY'] = 'the-secret-secret'
+    app.config['JWT_SECRET_KEY'] = 'secret'
     jwt=JWTManager(app)
+
+    
 
     # register Blueprint
     from .api.v1 import version1 as v1

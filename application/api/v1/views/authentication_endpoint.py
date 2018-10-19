@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse
 from ..models.user_model import Users
+from ..models import user_model
+
 from passlib.hash import sha256_crypt
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, 
 jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 from flask import jsonify
@@ -32,19 +33,12 @@ class UserRegistration(Resource):
 
         new_user = Users()
 
-        # if new_user.search_by_username(data['username']):
-        #     return {
-        #         'message' : 'User named {} already exist'.format( data['username'])
-        #      }
-
-        try:
-            new_user.create_user(name,username,email,password,gender,role)
-            return {
+        new_user.create_user(name,username,email,password,gender,role)
+        
+        return {
                 'message': 'User named {} was created'.format( data['username']),
             },201
 
-        except:
-            return {'message' : 'something is wrong'}, 500
 
     def get(self):
         """Get all users"""
@@ -57,11 +51,11 @@ class UserRegistration(Resource):
         return response
 
 class GetUser(Resource):
-    def get(self, user_id):
+    def get(self, username):
         """Get a single user"""
         user_obj= Users()
 
-        response = jsonify(user_obj.get_one_user(user_id))
+        response = jsonify(user_obj.get_one_user(username))
         response.status_code = 200
 
         return response
@@ -69,34 +63,18 @@ class GetUser(Resource):
 class UserLogin(Resource):
     def post(self):
         data = parser_2.parse_args()
-        user_dict =[]
-        user_dict.append(Users.get_user_dict(self))
+        username = data['username']
+        password = data['password']
+        users_dict = user_model.users_dict
 
-        user = [user for user in user_dict if user[0]['username'] == data['username']]
-
-        if not user:
-            return {
-                'message' : 'user {} does not exist'.format( data['username'])
-            }
-
-        if sha256_crypt.verify(data["password"], user[0][0]["password"]):
+        if username in users_dict and sha256_crypt.verify(password, users_dict[username]['password']):
             access_token = create_access_token(identity = data['username'])
-            refresh_token = create_refresh_token(identity = data['username'])
-            return {
-                'message' : 'Logged in as {}'.format( user[0][0]['username']),
-                'access token' : access_token,
-                'refresh toke' : refresh_token
-            }
+            return jsonify({
+                'message' : 'Logged in as {}'.format( username),
+                'access_token' : access_token
+                })
 
-        if data['password'] or data['username'] is None: 
-
-            return {'message' : 'Enter all the fields'}
-
-        if user[0][0]['username'] != data['username']:
-            return {'message' : 'User jdoees does not exist'}
-        else:
-            return {
-                'message' : 'wrong credentials'
-            }
-
-
+        return {'message' : 'User {} does not exist'.format( data['username'])}
+        
+            # access_token = create_access_token(identity = data['username'])
+            # refresh_token = create_refresh_token(identity = data['username'])

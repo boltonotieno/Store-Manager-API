@@ -1,10 +1,13 @@
 from flask import Flask, make_response, jsonify, request
 from flask_restful import Api, Resource
 from ..models.sales_model import Sale
-import json
+from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, 
+jwt_refresh_token_required, jwt_required, get_jwt_identity, get_raw_jwt)
+
 
 class Sales(Resource):
     """This class contain methods for sales endpoints"""
+    @jwt_required
     def post(self):
         """This method handles post requsts to create new sales"""
         data = request.get_json()

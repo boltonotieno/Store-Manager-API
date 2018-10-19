@@ -1,4 +1,1 @@
-{
-  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_invalid_username": true,
-  "application/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_wrong_passoword": true
-}
+{}
