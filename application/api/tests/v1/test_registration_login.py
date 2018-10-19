@@ -41,7 +41,7 @@ class TestAuthentication(unittest.TestCase):
         content_type='application/json')
         
         result = json.loads(response.data)
-        self.assertEqual(result['message'], 'User jdoe was created' )
+        self.assertEqual(result['message'], 'User named jdoe was created' )
         self.assertEqual(response.status_code, 201)
 
     def test_registration_of_existing_users(self):
@@ -51,10 +51,10 @@ class TestAuthentication(unittest.TestCase):
         content_type='application/json')
         
         result = json.loads(response.data)
-        self.assertEqual(result['message'], 'User jdoe already exist')
+        self.assertEqual(result['message'], 'User named jdoe already exist')
 
     def test_empty_fields(self):
-        """Test registeration of with missing username"""
+        """Test registration with missing username"""
         response = self.client.post('/api/v1/auth/registration', 
         data= json.dumps({
             'name' : 'Jane Doe',
@@ -67,6 +67,31 @@ class TestAuthentication(unittest.TestCase):
         result = json.loads(response.data)
         self.assertEqual(result['message'], {"username": "This field cannot be blank"})
         self.assertEqual(response.status_code, 400)
+
+    def test_get_all_users(self):
+        """Test if API can GET all users"""
+        response = self.client.post('/api/v1/users', 
+        data= json.dumps(self.data),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        
+        response= self.client.get('/api/v1/users')
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], 'success')
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_user_by_id(self):
+        """Test if API can GET single user by id"""
+        response = self.client.post('/api/v1/users/<int:user_id>', 
+        data= json.dumps(self.data),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        response = self.client.get('/api/v1/users/1')
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], 'success')
+        self.assertEqual(response.status_code, 200)
+
 
     def test_login(self):
         """Test login of users"""
