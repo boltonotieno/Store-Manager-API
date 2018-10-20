@@ -36,7 +36,7 @@ class TestProducts(unittest.TestCase):
 
         #register user
         response_reg = self.client.post('/api/v1/auth/registration', 
-        data= json.dumps(self.data),
+        data= json.dumps(self.data_reg),
         content_type='application/json')
 
         #user login
@@ -44,7 +44,6 @@ class TestProducts(unittest.TestCase):
         data= json.dumps(self.data_login),
         content_type='application/json')
         result_login = json.loads(response_login.data)
-        print(result_login)
         token = result_login['access_token']
 
         #user post sale
