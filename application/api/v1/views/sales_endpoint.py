@@ -22,6 +22,7 @@ class Sales(Resource):
 
         return response
 
+    @jwt_required
     def get(self, sale_id=None):
         """This method handles get requests to fetch all sales"""
         if sale_id is None:   
