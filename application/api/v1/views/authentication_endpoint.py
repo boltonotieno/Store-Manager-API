@@ -76,5 +76,3 @@ class UserLogin(Resource):
 
         return {'message' : 'User {} does not exist'.format( data['username'])}
         
-            # access_token = create_access_token(identity = data['username'])
-            # refresh_token = create_refresh_token(identity = data['username'])
