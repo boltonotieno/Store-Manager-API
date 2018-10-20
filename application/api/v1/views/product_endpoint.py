@@ -24,6 +24,7 @@ class Products(Resource):
 
         return response
 
+    @jwt_required
     def get(self, product_id=None):
         """This method handles get requests to fetch all products"""
         product_obj= Product()

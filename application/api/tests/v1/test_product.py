@@ -80,9 +80,11 @@ class TestProducts(unittest.TestCase):
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
         
-        response= self.client.get('/api/v1/product')
-        result = json.loads(response.data)
-        self.assertEqual(result['message'], 'success')
+        #user get all product
+        response= self.client.get('/api/v1/product',
+        headers = dict(Authorization='Bearer '+token))
+        result_get = json.loads(response.data)
+        self.assertEqual(result_get['message'], 'success')
         self.assertEqual(response.status_code, 200)
 
     def test_get_product_by_id(self):
@@ -107,9 +109,11 @@ class TestProducts(unittest.TestCase):
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        response = self.client.get('/api/v1/product/1')
-        result = json.loads(response.data)
-        self.assertEqual(result['message'], 'success')
+        #user get one product
+        response = self.client.get('/api/v1/product/1',
+        headers = dict(Authorization='Bearer '+token))
+        result_get_one = json.loads(response.data)
+        self.assertEqual(result_get_one['message'], 'success')
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
