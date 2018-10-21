@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/BoltC0rt3z/Store-Manager-API.svg?branch=ch-deploy-to-heroku-%23161360652)](https://travis-ci.org/BoltC0rt3z/Store-Manager-API)
 [![Coverage Status](https://coveralls.io/repos/github/BoltC0rt3z/Store-Manager-API/badge.svg?branch=bg-fix-travis-integration-161360194)](https://coveralls.io/github/BoltC0rt3z/Store-Manager-API?branch=bg-fix-travis-integration-161360194)
 
-
 Store Manager is a web application that helps store owners manage sales and product inventory
 records.
 
