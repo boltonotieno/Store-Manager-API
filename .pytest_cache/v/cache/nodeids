@@ -1,5 +1,8 @@
 [
   "application/api/tests/v1/test_product.py::TestProducts::test_get_all_products",
   "application/api/tests/v1/test_product.py::TestProducts::test_get_product_by_id",
-  "application/api/tests/v1/test_product.py::TestProducts::test_post_product"
+  "application/api/tests/v1/test_product.py::TestProducts::test_post_product",
+  "application/api/tests/v1/test_sales.py::TestProducts::test_get_all_sales",
+  "application/api/tests/v1/test_sales.py::TestProducts::test_get_sale_by_id",
+  "application/api/tests/v1/test_sales.py::TestProducts::test_post_sale"
 ]
