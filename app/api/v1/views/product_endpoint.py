@@ -11,6 +11,9 @@ class Products(Resource):
     def post(self):
         """This method handles post requsts to add new products"""
         data = request.get_json()
+        if not data:
+            return {'message' : 'Fill all the fields'}
+
         name = data.get('name').strip()
         price = data.get('price').strip()
         quantity = data.get('quantity').strip()
