@@ -14,10 +14,18 @@ class Products(Resource):
         min_quantity = data.get('min_quantity').strip()
         category = data.get('category').strip()
         
-        product_obj= Product(name, price, quantity, min_quantity, category)
+        product_obj= Product()
 
-        response = jsonify(product_obj.create_product())
+        response = jsonify(product_obj.create_product(name, price, quantity, min_quantity, category))
         response.status_code = 201
+
+        return response
+
+    def get(self):
+        """This method handles get requests to fetch all products"""
+        product_obj= Product()
+        response = jsonify(product_obj.get_all_product())
+        response.status_code = 200
 
         return response
 

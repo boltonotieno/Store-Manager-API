@@ -32,11 +32,13 @@ class TestProducts(unittest.TestCase):
 
     def test_get_all_products(self):
         """Test if API can GET all products"""
-        response = self.client.post('/api/v1/product', data=self.data)
+        response = self.client.post('/api/v1/product', 
+        data= json.dumps(self.data),
+        content_type='application/json')
         self.assertEqual(response.status_code, 201)
         
         response= self.client.get('/api/v1/product')
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data)
         self.assertEqual(result['message'], 'success')
         self.assertEqual(response.status_code, 200)
 
