@@ -19,12 +19,19 @@ class Sales(Resource):
 
         return response
 
-    def get(self):
+    def get(self, sale_id=None):
         """This method handles get requests to fetch all sales"""
-        sale_objs = Sale()
+        if sale_id is None:   
+            sale_objs = Sale()
+            response = jsonify(sale_objs.get_all_sale())
+            response.status_code = 200
 
-        response = jsonify(sale_objs.get_all_sale())
+            return response
+        
+        sale_obj = Sale()
+
+        response = jsonify(sale_obj.get_one_sale(sale_id))
         response.status_code = 200
-
+        
         return response
 

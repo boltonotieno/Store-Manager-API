@@ -27,9 +27,18 @@ class Sale():
         """Fetches all sales"""
         if len(self.sales) == 0:
             return {'message' : 'No sales'}
-            
+
         return {'Sales' : self.sales, 'message' : 'success' }
 
     def get_one_sale(self, sale_id):
         """Fetches one sale by id"""
-        pass
+        sale_dict = [sale for sale in self.sales if sale['sale_id'] == sale_id]
+
+        if len(self.sales) == 0:
+            return {'message' : 'No sales'}
+
+        if len(sale_dict) == 0:
+            return {'message' : 'No such sale'}
+
+
+        return {'sale' : sale_dict, 'message' : 'success'}
