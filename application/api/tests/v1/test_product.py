@@ -44,11 +44,13 @@ class TestProducts(unittest.TestCase):
 
     def test_get_product_by_id(self):
         """Test if API can GET single product by id"""
-        response = self.client.post('/api/v1/product', self.data)
+        response = self.client.post('/api/v1/product', 
+        data= json.dumps(self.data),
+        content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         response = self.client.get('/api/v1/product/1')
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data)
         self.assertEqual(result['message'], 'success')
         self.assertEqual(response.status_code, 200)
 

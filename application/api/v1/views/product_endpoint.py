@@ -21,11 +21,16 @@ class Products(Resource):
 
         return response
 
-    def get(self):
+    def get(self, product_id=None):
         """This method handles get requests to fetch all products"""
         product_obj= Product()
-        response = jsonify(product_obj.get_all_product())
+        if product_id is None:
+            response = jsonify(product_obj.get_all_product())
+            response.status_code = 200
+
+            return response
+
+        response = jsonify(product_obj.get_one_product(product_id))
         response.status_code = 200
 
         return response
-
