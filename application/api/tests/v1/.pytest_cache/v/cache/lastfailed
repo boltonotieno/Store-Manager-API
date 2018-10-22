@@ -1,5 +1,4 @@
 {
-  "test_product.py::TestProducts::test_get_all_products": true, 
-  "test_product.py::TestProducts::test_get_product_by_id": true, 
-  "test_product.py::TestProducts::test_post_product": true
+  "test_sales.py::TestProducts::test_get_all_sales": true,
+  "test_sales.py::TestProducts::test_get_sale_by_id": true
 }

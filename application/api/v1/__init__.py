@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint
 from flask_restful import Api
 from .views.product_endpoint import Products
-from .views.sale_endpoint import Sales
+from .views.sales_endpoint import Sales
 
 
 version1 = Blueprint('api', __name__, url_prefix='/api/v1')
