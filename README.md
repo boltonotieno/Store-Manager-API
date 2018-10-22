@@ -2,28 +2,57 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/348eef7a5f2e9c4300b6/maintainability)](https://codeclimate.com/github/BoltC0rt3z/Store-Manager-API/maintainability)
 [![Build Status](https://travis-ci.org/BoltC0rt3z/Store-Manager-API.svg?branch=ch-deploy-to-heroku-%23161360652)](https://travis-ci.org/BoltC0rt3z/Store-Manager-API)
-[![Coverage Status](https://coveralls.io/repos/github/BoltC0rt3z/Store-Manager-API/badge.svg?branch=bg-fix-travis-integration-161360194)](https://coveralls.io/github/BoltC0rt3z/Store-Manager-API?branch=bg-fix-travis-integration-161360194)
+[![Coverage Status](https://coveralls.io/repos/github/BoltC0rt3z/Store-Manager-API/badge.svg?branch=ch-deploy-to-heroku-%23161360652)](https://coveralls.io/github/BoltC0rt3z/Store-Manager-API?branch=ch-deploy-to-heroku-%23161360652)
 
 Store Manager is a web application that helps store owners manage sales and product inventory
 records.
 
-Features Endpoints:
-POST /api/v1/auth/registration      Creates a user account
+### Features Endpoints:
+| Method | Route | Endpoint Functionality |
+| :---         |     :---       |          :--- |
+| POST   | /api/v1/auth/register     | Creates a user account    |
+| POST     | /api/v1/auth/login        | Login a user      |
+| GET     | /api/v1/users        | Gets all users     |
+| GET     | /api/v1/users/user_id      |Gets a single user by id      |
+| POST     | /api/v1/product        | Add a product      |
+| POST     | /api/v1/sale        | Add a sales record      |
+| GET     | /api/v1/product       | Retrieve all products     |
+| GET     | /api/v1/product/product_id       | Retrieve a single product by id     |
+| GET     | /api/v1/sale       | Retrieve all sales records    |
+| GET     | /api/v1/sale/sale_id      | Retrieve a single sales record by id     |
 
-POST /api/v1/auth/login     Login a user
 
-GET /api/v1/auth/users      Gets all users
+### Installation Procedure
+clone the repo
 
-GET /api/v1/auth/users/user_id      Gets a single user by user id
+``` 
+git clone https://github.com/BoltC0rt3z/Store-Manager-API
 
-POST /api/v1/products       Add a product
+```
 
-POST /api/v1/sales      Add a sales record
+create and activate the virtual environment
 
-GET /api/v1/products    Retrieve all products
+```
+virtualenv <environment name>
 
-GET /api/v1/sales       Retrieve all sales records
+```
+```
+$source <env name>/bin/activate (in bash)
 
-GET /api/v1/products/productId  Retrieve a single product by id
+```
+install project dependencies:
 
-GET /api/v1/sales/sale_id        Retrieve a single sales record by id
+```
+$pip install -r requirements.txt
+
+```
+### Running
+Running the application
+```
+python run.py
+
+```
+### Testing
+Using pytest . The tests are in app/api/test/v1
+```
+pytest -v
