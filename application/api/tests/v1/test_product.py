@@ -16,15 +16,18 @@ class TestProducts(unittest.TestCase):
             'name' : 'Pilsner',
             'price' : '200',
             'quantity' : '20',
+            'min_quantity' : '5',
             'category' : 'beer'
         }
 
     def test_post_product(self):
         """Test if API can POST new products"""
-        response = self.client.post('/api/v1/product', data=self.data)
+        response = self.client.post('/api/v1/product', 
+        data= json.dumps(self.data),
+        content_type='application/json')
         
-        result = json.loads(response.data.decode())
-        self.assertEqual(result['message'], 'success' )
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], 'Created successfully' )
         self.assertEqual(response.status_code, 201)
 
     def test_get_all_products(self):
