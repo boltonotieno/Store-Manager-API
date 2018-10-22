@@ -1,7 +1,7 @@
 import unittest
 import os
 import json
-from application.app import create_app
+from app import create_app
 
 class TestProducts(unittest.TestCase):
     """Product TestCases Class"""
