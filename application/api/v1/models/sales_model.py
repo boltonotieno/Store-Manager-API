@@ -1,10 +1,11 @@
+
 class Sale():
     """Class contain sales model functions"""
     sales = []
     def __init__(self):
         """Initialises the sales model"""
         # self.sales = []
-
+    
     def create_sale(self, name, price, quantity):
         """Creates a new sale"""
         cart_item = dict(
@@ -22,7 +23,8 @@ class Sale():
         self.sales.append(sale)
 
         return {'Sales' : self.sales, 'message' : 'Created successfully'}
-
+    
+    
     def get_all_sale(self):
         """Fetches all sales"""
         if len(self.sales) == 0:

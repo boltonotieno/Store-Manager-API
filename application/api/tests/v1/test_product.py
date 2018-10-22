@@ -19,10 +19,38 @@ class TestProducts(unittest.TestCase):
             'min_quantity' : '5',
             'category' : 'beer'
         }
+        self.data_reg = {
+            'name' : 'Jane Doe',
+            'username' : 'jdoe',
+            'email' : 'jdoe@gmail.com',
+            'password' : 'jdoepass',
+            'gender' : 'female',
+            'role': 'admin'
+        }
+        self.data_login = {
+            'username' : 'jdoe',
+            'password' : 'jdoepass'
+        }
 
     def test_post_product(self):
         """Test if API can POST new products"""
+
+        #register user
+        response_reg = self.client.post('/api/v1/auth/registration', 
+        data= json.dumps(self.data_reg),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v1/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
+        #user post product
         response = self.client.post('/api/v1/product', 
+        headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         
@@ -32,26 +60,60 @@ class TestProducts(unittest.TestCase):
 
     def test_get_all_products(self):
         """Test if API can GET all products"""
-        response = self.client.post('/api/v1/product', 
+
+         #register user
+        response_reg = self.client.post('/api/v1/auth/registration', 
+        data= json.dumps(self.data_reg),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v1/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post product
+        response = self.client.post('/api/v1/product',
+        headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
         
-        response= self.client.get('/api/v1/product')
-        result = json.loads(response.data)
-        self.assertEqual(result['message'], 'success')
+        #user get all product
+        response= self.client.get('/api/v1/product',
+        headers = dict(Authorization='Bearer '+token))
+        result_get = json.loads(response.data)
+        self.assertEqual(result_get['message'], 'success')
         self.assertEqual(response.status_code, 200)
 
     def test_get_product_by_id(self):
         """Test if API can GET single product by id"""
-        response = self.client.post('/api/v1/product', 
+
+         #register user
+        response_reg = self.client.post('/api/v1/auth/registration', 
+        data= json.dumps(self.data_reg),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v1/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post product
+        response = self.client.post('/api/v1/product',
+        headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        response = self.client.get('/api/v1/product/1')
-        result = json.loads(response.data)
-        self.assertEqual(result['message'], 'success')
+        #user get one product
+        response = self.client.get('/api/v1/product/1',
+        headers = dict(Authorization='Bearer '+token))
+        result_get_one = json.loads(response.data)
+        self.assertEqual(result_get_one['message'], 'success')
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
