@@ -2,12 +2,14 @@ import psycopg2
 import os
 
 
-url = os.getenv('DATABASE_URL')          
+def db_connection:
+    """Create Database Connection"""
 
-#creating the connection
-con = psycopg2.connect(url)
+    url = os.getenv('DATABASE_URL')          
+    connection = psycopg2.connect(url)
 
-#creating the cursor
-cur = con.cursor()
+    return connection
 
-con.close()
+# creating the cursor
+# cur = con.cursor()
+
