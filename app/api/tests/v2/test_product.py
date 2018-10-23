@@ -175,6 +175,11 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(result_modify_one['message'], 'successfuly deleted')
         self.assertEqual(response_modify.status_code, 200)
 
+        #Test if the product has been actually deleted by trying to GET it
+        response = self.client.get('/api/v2/products/1',
+        headers = dict(Authorization='Bearer '+token))
+        self.assertEqual(response.status_code, 404)
+
 
     def tearDown(self):
         """Removes all initialised variables"""
