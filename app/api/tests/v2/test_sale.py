@@ -18,6 +18,11 @@ class TestSales(unittest.TestCase):
             'quantity' : '5'
         }
 
+        self.data_2 = {
+            'name' : 'Tusker',
+            'price' : '200'
+        }
+
         self.data_reg = {
             'name' : 'Jane Doe',
             'username' : 'jdoe',
@@ -55,6 +60,32 @@ class TestSales(unittest.TestCase):
         result = json.loads(response.data)
         self.assertEqual(result['message'], 'Created successfully' )
         self.assertEqual(response.status_code, 201)
+
+    def test_post_sale_with_empty_fields(self):
+        """Test if API can POST new sales with empty fields"""
+
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data_reg),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post sales
+        response = self.client.post('/api/v2/sales',
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps(self.data_2),
+        content_type='application/json')
+        
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], {"quantity": "This field cannot be blank"})
+        self.assertEqual(response.status_code, 400)
+
 
     def test_get_all_saless(self):
         """Test if API can GET all saless"""
