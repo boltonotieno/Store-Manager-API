@@ -31,6 +31,90 @@ class TestSales(unittest.TestCase):
             'password' : 'jdoepass'
         }
 
+    def test_post_sales(self):
+        """Test if API can POST new sales"""
+
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data_reg),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post sales
+        response = self.client.post('/api/v2/sales',
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps(self.data),
+        content_type='application/json')
+        
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], 'Created successfully' )
+        self.assertEqual(response.status_code, 201)
+
+    def test_get_all_saless(self):
+        """Test if API can GET all saless"""
+
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post sales
+        response_post = self.client.post('/api/v2/sales',
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps(self.data),
+        content_type='application/json')
+        self.assertEqual(response_post.status_code, 201)
+
+        
+        #user get all saless
+        response_get= self.client.get('/api/v2/sales',
+        headers = dict(Authorization='Bearer '+token))
+        result_get = json.loads(response_get.data)
+        self.assertEqual(result_get['message'], 'success')
+        self.assertEqual(response_get.status_code, 200)
+
+    def test_get_sales_by_id(self):
+        """Test if API can GET single sales by id"""
+
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post sales
+        response = self.client.post('/api/v2/sales', 
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps(self.data),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        #user get one sales
+        response = self.client.get('/api/v2/sales/1',
+        headers = dict(Authorization='Bearer '+token))
+        result_get_one = json.loads(response.data)
+        self.assertEqual(result_get_one['message'], 'success')
+        self.assertEqual(response.status_code, 200)
+
     def tearDown(self):
         """Removes all initialised variables"""
         self.app_context.pop()
