@@ -26,8 +26,33 @@ class TestLogin(unittest.TestCase):
             'password' : 'jdoepass'
         }
 
+     def test_login(self):
+        """Test login of users"""  
+        response = self.client.post('/api/v2/auth/registration', 
+        data= json.dumps(self.data),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        response = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_2),
+        content_type='application/json')
+
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], 'Logged in succesful')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_login_with_missing_field(self):
+        """Test login with missing password"""
+        response = self.client.post('/api/v2/auth/login',
+        data= json.dumps({'username' : 'jdoe'}),
+        content_type='application/json')
+
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], {"password": "This field cannot be blank"})
+
     def tearDown(self):
         """Removes all initialised variables"""
         self.app_context.pop()
 
-        
+    
