@@ -169,15 +169,17 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
         #user delete product
-        response_modify = self.client.delete('/api/v2/products/1',
+        response_delete = self.client.delete('/api/v2/products/1',
         headers = dict(Authorization='Bearer '+token))      
         result_delete_one = json.loads(response_modify.data)
         self.assertEqual(result_modify_one['message'], 'successfuly deleted')
         self.assertEqual(response_modify.status_code, 200)
 
         #Test if the product has been actually deleted by trying to GET it
-        response = self.client.get('/api/v2/products/1',
+        response_get = self.client.get('/api/v2/products/1',
         headers = dict(Authorization='Bearer '+token))
+        result_get = json.loads(response_get.data)
+        self.assertEqual(result_get['message'], 'Product not found'])
         self.assertEqual(response.status_code, 404)
 
 
