@@ -146,6 +146,36 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(result_modify_one['message'], 'successfuly modified ')
         self.assertEqual(response_modify.status_code, 200)
 
+    def test_delete_product(self):
+        """Test if API can DELETE  a single product"""
+
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data_reg),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post product
+        response = self.client.post('/api/v2/products',
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps(self.data),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        #user delete product
+        response_modify = self.client.delete('/api/v2/products/1',
+        headers = dict(Authorization='Bearer '+token))      
+        result_delete_one = json.loads(response_modify.data)
+        self.assertEqual(result_modify_one['message'], 'successfuly deleted')
+        self.assertEqual(response_modify.status_code, 200)
+
+
     def tearDown(self):
         """Removes all initialised variables"""
         self.app_context.pop()
