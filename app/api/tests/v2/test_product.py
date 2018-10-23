@@ -48,7 +48,7 @@ class TestProducts(unittest.TestCase):
         token = result_login['access_token']
 
         #user post product
-        response = self.client.post('/api/v2/product', 
+        response = self.client.post('/api/v2/products', 
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
@@ -73,14 +73,14 @@ class TestProducts(unittest.TestCase):
         token = result_login['access_token']
 
         #user post product
-        response = self.client.post('/api/v2/product',
+        response = self.client.post('/api/v2/products',
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
         
         #user get all product
-        response= self.client.get('/api/v2/product',
+        response= self.client.get('/api/v2/products',
         headers = dict(Authorization='Bearer '+token))
         result_get = json.loads(response.data)
         self.assertEqual(result_get['message'], 'success')
@@ -95,25 +95,56 @@ class TestProducts(unittest.TestCase):
         content_type='application/json')
 
         #user login
-        response_login = self.client.post('/api/v1/auth/login', 
+        response_login = self.client.post('/api/v2/auth/login', 
         data= json.dumps(self.data_login),
         content_type='application/json')
         result_login = json.loads(response_login.data)
         token = result_login['access_token']
 
         #user post product
-        response = self.client.post('/api/v2/product',
+        response = self.client.post('/api/v2/products',
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         #user get one product
-        response = self.client.get('/api/v2/product/1',
+        response = self.client.get('/api/v2/products/1',
         headers = dict(Authorization='Bearer '+token))
         result_get_one = json.loads(response.data)
         self.assertEqual(result_get_one['message'], 'success')
         self.assertEqual(response.status_code, 200)
+
+    def test_modify_product(self):
+        """Test if API can modify(PUT)  a single product"""
+        
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data_reg),
+        content_type='application/json')
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        #user post product
+        response = self.client.post('/api/v2/products',
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps(self.data),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        #user modify product
+        response_modify = self.client.put('/api/v2/products/1',
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps({'username' : 'jdoe'}),
+        content_type='application/json')
+        result_modify_one = json.loads(response_modify.data)
+        self.assertEqual(result_modify_one['message'], 'successfuly modified ')
+        self.assertEqual(response_modify.status_code, 200)
 
     def tearDown(self):
         """Removes all initialised variables"""
