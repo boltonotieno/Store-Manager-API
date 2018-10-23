@@ -20,7 +20,47 @@ class TestAuthentication(unittest.TestCase):
             'gender' : 'female',
             'role': 'admin'
         }
-  
+        
+    def test_registration(self):
+        """Test registration of new users"""
+        response = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data),
+        content_type='application/json')
+        
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], 'User created successfully' )
+        self.assertEqual(response.status_code, 201)
+
+    def test_empty_fields(self):
+        """Test registration with missing username"""
+        response = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps({
+            'name' : 'Jane Doe',
+            'email' : 'jdoe@gmail.com',
+            'password' : 'jdoepass',
+            'gender' : 'female',
+            'role': 'admin'}),
+        content_type='application/json')
+
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], {"username": "This field cannot be blank"})
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_email(self):
+        """Test registration with invalid email"""
+        response = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps({
+            'name' : 'Jane Doe',
+            'email' : 'jdoegmail.com',
+            'password' : 'jdoepass',
+            'gender' : 'female',
+            'role': 'admin'}),
+        content_type='application/json')
+
+        result = json.loads(response.data)
+        self.assertEqual(result['message'], {"Invalid Email"})
+        self.assertEqual(response.status_code, 400)
+
 
     def tearDown(self):
         """Removes all initialised variables"""
