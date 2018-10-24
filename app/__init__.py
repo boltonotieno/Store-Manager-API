@@ -7,6 +7,7 @@ from .api.v2.models.user_model import Users
 # Create the applicatiion
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
+    app.url_map.strict_slashes = False
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     app.config['SECRET_KEY'] = 'the-secret-secret'
