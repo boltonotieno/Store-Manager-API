@@ -1,38 +1,50 @@
 import psycopg2
-from . import db_connection
+import os
+from ..models import db_connection
 
 class Users(object):
     """Class contain user model functions"""
 
-    def create_table_user(self, connection):
+    connection = db_connection()
+    cursor = connection.cursor()
+
+    def create_table_user(self):
         """create Table users"""
 
         sql="""CREATE TABLE IF NOT EXISTS users(
         userid SERIAL PRIMARY KEY UNIQUE NOT NULL,
-        name VARCHAR(25) NOT NULL,
+        name VARCHAR(50) NOT NULL,
         username VARCHAR(50) NOT NULL UNIQUE,
         email VARCHAR(150) NOT NULL UNIQUE,
-        password VARCHAR(25) NOT NULL,
-        gender VARCHAR(5) NOT NULL
+        password VARCHAR(255) NOT NULL,
+        gender VARCHAR(15) NOT NULL,
+        role VARCHAR(15) NOT NULL
         )"""
-        cursor = connection.cursor()
-        cursor.execute(sql)
+        self.cursor.execute(sql)
+        self.connection.commit()
 
-    def register_user(self, name,username,email,password,gender):
+    def drop_table_user(self):
+        """drop Table users"""
+
+        sql="""DROP TABLE users"""
+        self.cursor.execute(sql)
+        self.connection.commit()
+
+    def register_user(self):
         """creates a new user"""
 
-        sql="""INSERT INTO users(name,username,email,password,gender) VALUES(%s,%s,%s,%s,%s)"""
-        cursor.execute(sql,(name,username,email,password,gender))
-        return cursor
+        sql="""INSERT INTO users(name,username,email,password,gender,role) VALUES(%s,%s,%s,%s,%s,%s)"""
 
-    def get_all_users(self):
+        return sql
+
+    def get_all_users(self, cursor):
         """Fetch all users"""
 
         sql="SELECT * FROM users"
         cursor.execute(sql)
         return cursor
 
-    def get_one_user(self,userid):
+    def get_one_user(self,userid, cursor):
         """Fetch user by id"""
 
         sql="SELECT * FROM users WHERE userid = %s"
