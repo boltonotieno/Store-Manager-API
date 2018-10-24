@@ -2,6 +2,7 @@ import unittest
 import os
 import json
 from app import create_app
+from ...v2.models.user_model import Users
 
 class TestRegistration(unittest.TestCase):
     """Authentication TestCases Class"""
@@ -12,6 +13,11 @@ class TestRegistration(unittest.TestCase):
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
+
+        with self.app.app_context():
+            # create all tables
+            db = Users()
+            db.create_table_user()
         self.data = {
             'name' : 'Jane Doe',
             'username' : 'jdoe',
@@ -87,6 +93,8 @@ class TestRegistration(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
-        """Removes all initialised variables"""
+        """Removes all initialised variables and Drops table"""
         self.app_context.pop()
+        db = Users()
+        db.drop_table_user()
 
