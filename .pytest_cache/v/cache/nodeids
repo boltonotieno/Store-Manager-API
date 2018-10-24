@@ -1,7 +1,4 @@
 [
-  "app/api/tests/v2/test_registration.py::TestRegistration::test_empty_fields",
-  "app/api/tests/v2/test_registration.py::TestRegistration::test_get_all_users",
-  "app/api/tests/v2/test_registration.py::TestRegistration::test_get_user_by_id",
-  "app/api/tests/v2/test_registration.py::TestRegistration::test_invalid_email",
-  "app/api/tests/v2/test_registration.py::TestRegistration::test_registration"
+  "app/api/tests/v2/test_login.py::TestLogin::test_login",
+  "app/api/tests/v2/test_login.py::TestLogin::test_login_with_missing_field"
 ]
