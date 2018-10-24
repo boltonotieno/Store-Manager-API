@@ -1,6 +1,5 @@
 import psycopg2
 import os
-from app import create_app
 
 
 def db_connection():

@@ -2,7 +2,7 @@ import psycopg2
 import os
 from ..models import db_connection
 
-class Users(object):
+class Users:
     """Class contain user model functions"""
 
     connection = db_connection()
@@ -37,12 +37,12 @@ class Users(object):
 
         return sql
 
-    def get_all_users(self, cursor):
+    def get_all_users(self):
         """Fetch all users"""
 
         sql="SELECT * FROM users"
-        cursor.execute(sql)
-        return cursor
+    
+        return sql
 
     def get_one_user(self,userid, cursor):
         """Fetch user by id"""

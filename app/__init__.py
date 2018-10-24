@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint
 from instance.config import app_config
 from flask_jwt_extended import JWTManager
+from .api.v2.models.user_model import Users
 
 
 # Create the applicatiion

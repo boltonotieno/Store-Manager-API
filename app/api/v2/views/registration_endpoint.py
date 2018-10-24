@@ -16,6 +16,7 @@ parser.add_argument('gender', help = 'This field cannot be blank', required = Tr
 parser.add_argument('role', help = 'This field cannot be blank', required = True)
 
 class Registration(Resource):
+
     def post(self):
         """Post new users"""
         connection = db_connection()
@@ -31,18 +32,40 @@ class Registration(Resource):
 
         #validate email
         try:
-            raw_email = validate_email(email)
-            valid_email = raw_email['email']
+            validated_email = validate_email(email)
+            valid_email = validated_email['email']
         except:
             return {'message' : 'Invalid Email'},400
         
         new_user = Users()
         sql = new_user.register_user()
         cursor.execute(sql,(name,username,valid_email,password,gender,role))
+        connection.commit()
         
         return {
                 'message': 'User created successfully',
             },201
 
+    def get(self):
+        """Get all Users"""
 
+        connection = db_connection()
+        cursor = connection.cursor()
 
+        users = Users()
+        sql = users.get_all_users()
+        cursor.execute(sql)
+        data = cursor.fetchall()
+
+        if data is None:
+            return {'message' : 'No users'}
+
+        return {
+                'message' : 'success',
+                'Users' : data
+            },200
+
+# class User(Resource):
+#     def get(self, user_id):
+
+        
