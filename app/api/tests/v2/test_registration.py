@@ -70,6 +70,9 @@ class TestRegistration(unittest.TestCase):
     
     def test_get_all_users(self):
         """Test if API can GET all users"""
+        response = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data),
+        content_type='application/json')        
     
         response= self.client.get('/api/v2/users')
         result = json.loads(response.data)
@@ -78,6 +81,9 @@ class TestRegistration(unittest.TestCase):
 
     def test_get_user_by_id(self):
         """Test if API can GET single user by id"""
+        response = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps(self.data),
+        content_type='application/json')        
 
         response = self.client.get('/api/v2/users/1')
         result = json.loads(response.data)
@@ -86,7 +92,7 @@ class TestRegistration(unittest.TestCase):
 
     def tearDown(self):
         """Removes all initialised variables and Drops table"""
-        # self.app_context.pop()
-        # db = Users()
-        # db.drop_table_user()
+        self.app_context.pop()
+        db = Users()
+        db.drop_table_user()
 

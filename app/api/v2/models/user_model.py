@@ -44,9 +44,9 @@ class Users:
     
         return sql
 
-    def get_one_user(self,userid, cursor):
+    def get_one_user(self):
         """Fetch user by id"""
 
         sql="SELECT * FROM users WHERE userid = %s"
-        cursor.execute(sql,(userid,))
-        return cursor
+        return sql
+        

@@ -65,7 +65,25 @@ class Registration(Resource):
                 'Users' : data
             },200
 
-# class User(Resource):
-#     def get(self, user_id):
+class User(Resource):
+    def get(self, user_id):
+        """Get one User"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        users = Users()
+        sql = users.get_one_user()
+        cursor.execute(sql,(user_id,))
+        data = cursor.fetchone()
+
+        if data is None:
+            return {'message' : 'User not Found'}
+
+        return {
+            'message' : 'success',
+            'User' : data
+        },200
+
 
         
