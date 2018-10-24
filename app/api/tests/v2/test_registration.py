@@ -3,7 +3,7 @@ import os
 import json
 from app import create_app
 
-class TestAuthentication(unittest.TestCase):
+class TestRegistration(unittest.TestCase):
     """Authentication TestCases Class"""
 
     def setUp(self):
