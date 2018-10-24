@@ -4,6 +4,7 @@ from flask import jsonify
 from ..models.user_model import Users
 from passlib.hash import sha256_crypt
 from ..models import db_connection
+from email_validator import validate_email
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
@@ -28,9 +29,16 @@ class Registration(Resource):
         gender = data['gender']
         role = data['role']
 
+        #validate email
+        try:
+            raw_email = validate_email(email)
+            valid_email = raw_email['email']
+        except:
+            return {'message' : 'Invalid Email'},400
+        
         new_user = Users()
         sql = new_user.register_user()
-        cursor.execute(sql,(name,username,email,password,gender,role))
+        cursor.execute(sql,(name,username,valid_email,password,gender,role))
         
         return {
                 'message': 'User created successfully',

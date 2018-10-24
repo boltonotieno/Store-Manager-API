@@ -57,6 +57,7 @@ class TestRegistration(unittest.TestCase):
         response = self.client.post('/api/v2/auth/signup', 
         data= json.dumps({
             'name' : 'Jane Doe',
+            'username' : 'jdoe',
             'email' : 'jdoegmail.com',
             'password' : 'jdoepass',
             'gender' : 'female',
@@ -64,7 +65,7 @@ class TestRegistration(unittest.TestCase):
         content_type='application/json')
 
         result = json.loads(response.data)
-        self.assertEqual(result['message'], {"Invalid Email"})
+        self.assertEqual(result['message'], "Invalid Email")
         self.assertEqual(response.status_code, 400)
 
     
