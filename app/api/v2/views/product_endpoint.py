@@ -35,4 +35,44 @@ class Product(Resource):
                 'message': 'Product created successfully',
             },201
 
-  
+    def get(self):
+        """Get all Products"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        products = Products()
+        sql = products.get_all_products()
+        cursor.execute(sql)
+        data = cursor.fetchall()
+
+        if data is None:
+            return {'message' : 'No products'}
+
+        return {
+                'message' : 'success',
+                'Users' : data
+            },200
+
+class SingleProduct(Resource):
+    def get(self, product_id):
+        """Get one Product"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        product = Products()
+        sql = product.get_one_product()
+        cursor.execute(sql,(product_id,))
+        data = cursor.fetchone()
+
+        if data is None:
+            return {'message' : 'Product not Found'}
+
+        return {
+            'message' : 'success',
+            'User' : data
+        },200
+
+
+        
