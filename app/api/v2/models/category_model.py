@@ -2,7 +2,7 @@ import psycopg2
 import os
 from ..models import db_connection
 
-class Category:
+class Categories:
     """Class contain category model functions"""
 
     connection = db_connection()
