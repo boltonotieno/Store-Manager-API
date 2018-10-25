@@ -55,7 +55,7 @@ class Sale(Resource):
             },200
 
 
-class SingleSales(Resource):
+class SingleSale(Resource):
     def get(self, sale_id):
         """Get one sale"""
 
