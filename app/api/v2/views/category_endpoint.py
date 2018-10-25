@@ -18,15 +18,17 @@ class Category(Resource):
         data = parser.parse_args()
         name = data['name']
         
-        new_category = Categories()
-        sql = new_category.create_category()
-        cursor.execute(sql,(name))
-        connection.commit()
-        
-        return {
-                'message': 'Category created successfully',
-            },201
-
+        try:
+            new_category = Categories()
+            sql = new_category.create_category()
+            cursor.execute(sql,(name,))
+            connection.commit()
+            
+            return {
+                    'message': 'Category created successfully',
+                },201
+        except:
+            return {'message' : 'Category already exist'}
 
     def get(self):
         """Get all Categories"""
@@ -77,14 +79,18 @@ class SingleCategory(Resource):
         data = parser.parse_args()
         name = data['name']
 
-        category = Categories()
-        sql = category.modify_category()
-        cursor.execute(sql,(name,category_id))
-        connection.commit()
+        try:
+            category = Categories()
+            sql = category.modify_category()
+            cursor.execute(sql,(name,category_id))
+            connection.commit()
 
-        return {
-                'message': 'successfuly modified'
-            },200
+            return {
+                    'message': 'successfuly modified'
+                },200
+                
+        except:
+            return {'message': 'Category already exist'}
 
 
     def delete(self, category_id):
@@ -93,12 +99,16 @@ class SingleCategory(Resource):
         connection = db_connection()
         cursor = connection.cursor()
 
-        category = Categories()
-        sql = category.delete_category()
-        cursor.execute(sql,(category_id,))
-        connection.commit()
+        try:
+            category = Categories()
+            sql = category.delete_category()
+            cursor.execute(sql,(category_id,))
+            connection.commit()
 
-        return {
-                'message': 'successfuly deleted'
-            },200
+            return {
+                  'message': 'successfuly deleted'
+              },200
+
+        except:
+            return {'message' : 'Category not found'}
 

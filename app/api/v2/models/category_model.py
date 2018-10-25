@@ -13,7 +13,7 @@ class Categories:
 
         sql="""CREATE TABLE IF NOT EXISTS category(
         categoryid SERIAL PRIMARY KEY UNIQUE NOT NULL,
-        name VARCHAR(50) NOT NULL
+        name VARCHAR(50) UNIQUE NOT NULL
         )"""
         self.cursor.execute(sql)
         self.connection.commit()
