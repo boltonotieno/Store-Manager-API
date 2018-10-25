@@ -13,7 +13,7 @@ class Products:
 
         sql="""CREATE TABLE IF NOT EXISTS products(
         productid SERIAL PRIMARY KEY UNIQUE NOT NULL,
-        name VARCHAR(50) NOT NULL,
+        name VARCHAR(50) UNIQUE NOT NULL,
         price INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
         min_quantity INTEGER NOT NULL,
