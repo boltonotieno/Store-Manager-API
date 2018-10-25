@@ -89,12 +89,27 @@ class SingleProduct(Resource):
 
         product = Products()
         sql = product.modify_product()
-        cursor.execute(sql,(name,price,quantity,min_quantity,category,product_id,))
+        cursor.execute(sql,(name,price,quantity,min_quantity,category,product_id))
         connection.commit()
 
         return {
-                'message': 'successfuly modified',
-            },201
+                'message': 'successfuly modified'
+            },200
+
+    def delete(self, product_id):
+        """delete one Product"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        product = Products()
+        sql = product.delete_product()
+        cursor.execute(sql,(product_id,))
+        connection.commit()
+
+        return {
+                'message': 'successfuly deleted'
+            },200
 
 
         
