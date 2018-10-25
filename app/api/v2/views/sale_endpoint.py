@@ -74,3 +74,29 @@ class SingleSale(Resource):
             'message' : 'success',
             'Sale' : data
         },200
+
+    
+    def put(self, sale_id):
+        """Modify one Sale"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        data = parser.parse_args()
+        name = data['name']
+        price = data['price']
+        quantity = data['quantity']
+
+        try:
+            sale = Sales()
+            sql = sale.modify_sales()
+            cursor.execute(sql,(name,price,quantity,sale_id))
+            connection.commit()
+
+            return {
+                    'message': 'successfuly modified'
+                },200
+                
+        except:
+            return {'message': 'Sale not found'}
+
