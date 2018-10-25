@@ -26,3 +26,43 @@ class Category(Resource):
         return {
                 'message': 'Category created successfully',
             },201
+
+
+    def get(self):
+        """Get all Categories"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        categories = Categories()
+        sql = categories.get_all_category()
+        cursor.execute(sql)
+        data = cursor.fetchall()
+
+        if len(data) == 0:
+            return {'message' : 'No categories'}
+
+        return {
+                'message' : 'success',
+                'Categories' : data
+            },200
+
+class SingleCategory(Resource):
+    def get(self, category_id):
+        """Get one Category"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        category = Categories()
+        sql = category.get_one_category()
+        cursor.execute(sql,(category_id,))
+        data = cursor.fetchone()
+
+        if data is None:
+            return {'message' : 'Category not Found'}
+
+        return {
+            'message' : 'success',
+            'Category' : data
+        },200
