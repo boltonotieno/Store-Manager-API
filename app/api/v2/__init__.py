@@ -4,6 +4,7 @@ from .views.registration_endpoint import Registration, User
 from .views.login_endpoint import Login
 from .views.product_endpoint import Product, SingleProduct
 from .views.category_endpoint import Category, SingleCategory
+from .views.sale_endpoint import Sale
 
 
 version2 = Blueprint('api2', __name__, url_prefix='/api/v2')
@@ -16,4 +17,4 @@ api.add_resource(Product, '/products')
 api.add_resource(SingleProduct, '/products/<int:product_id>')
 api.add_resource(Category, '/category')
 api.add_resource(SingleCategory, '/category/<int:category_id>')
-
+api.add_resource(Sale, '/sales')
