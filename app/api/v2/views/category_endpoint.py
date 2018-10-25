@@ -66,3 +66,23 @@ class SingleCategory(Resource):
             'message' : 'success',
             'Category' : data
         },200
+
+
+    def put(self, category_id):
+        """Modify one Category"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        data = parser.parse_args()
+        name = data['name']
+
+        category = Categories()
+        sql = category.modify_category()
+        cursor.execute(sql,(name,category_id))
+        connection.commit()
+
+        return {
+                'message': 'successfuly modified'
+            },200
+
