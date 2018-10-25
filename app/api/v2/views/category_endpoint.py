@@ -9,4 +9,20 @@ parser = reqparse.RequestParser()
 parser.add_argument('name', help = 'This field cannot be blank', required = True)
 
 class Category(Resource):
-    pass
+
+    def post(self):
+        """Post new category"""
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        data = parser.parse_args()
+        name = data['name']
+        
+        new_category = Categories()
+        sql = new_category.create_category()
+        cursor.execute(sql,(name))
+        connection.commit()
+        
+        return {
+                'message': 'Category created successfully',
+            },201
