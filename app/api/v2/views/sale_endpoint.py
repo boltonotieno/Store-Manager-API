@@ -100,3 +100,22 @@ class SingleSale(Resource):
         except:
             return {'message': 'Sale not found'}
 
+    def delete(self, sale_id):
+        """delete one sale"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        try:
+            sale = Sales()
+            sql = sale.delete_sales()
+            cursor.execute(sql,(sale_id,))
+            connection.commit()
+
+            return {
+                  'message': 'successfuly deleted'
+              },200
+
+        except:
+            return {'message' : 'Sale not found'}
+
