@@ -185,7 +185,7 @@ class TestSales(unittest.TestCase):
         data= json.dumps({
             'name' : 'Tusker',
             'price' : '200',
-            'quanitiy' : '10'
+            'quantity' : '10'
             }),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
