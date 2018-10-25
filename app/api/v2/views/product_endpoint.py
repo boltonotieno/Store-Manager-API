@@ -46,12 +46,12 @@ class Product(Resource):
         cursor.execute(sql)
         data = cursor.fetchall()
 
-        if data is None:
+        if len(data) == 0:
             return {'message' : 'No products'}
 
         return {
                 'message' : 'success',
-                'Users' : data
+                'Products' : data
             },200
 
 class SingleProduct(Resource):
@@ -71,7 +71,7 @@ class SingleProduct(Resource):
 
         return {
             'message' : 'success',
-            'User' : data
+            'Product' : data
         },200
 
     def put(self, product_id):
