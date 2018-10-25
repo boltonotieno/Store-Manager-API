@@ -11,8 +11,8 @@ parser.add_argument('price', help = 'This field cannot be blank', required = Tru
 parser.add_argument('quantity', help = 'This field cannot be blank', required = True)
 
 class Sale(Resource):
-
-   def post(self):
+    
+    def post(self):
         """Post new sales"""
         connection = db_connection()
         cursor = connection.cursor()
@@ -29,8 +29,48 @@ class Sale(Resource):
             connection.commit()
             
             return {
-                    'message': 'Sales created successfully',
+                    'message': 'Sales created successfully'
                 },201
         except:
             return {'message' : 'Sales Not Created'}
 
+
+    def get(self):
+        """Get all sales"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        sales = Sales()
+        sql = sales.get_all_sales()
+        cursor.execute(sql)
+        data = cursor.fetchall()
+
+        if len(data) == 0:
+            return {'message' : 'No sales'}
+
+        return {
+                'message' : 'success',
+                'Sales' : data
+            },200
+
+
+class SingleSales(Resource):
+    def get(self, sale_id):
+        """Get one sale"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        sale = Sales()
+        sql = sale.get_one_sale()
+        cursor.execute(sql,(sale_id,))
+        data = cursor.fetchone()
+
+        if data is None:
+            return {'message' : 'Sale not Found'}
+
+        return {
+            'message' : 'success',
+            'Sale' : data
+        },200
