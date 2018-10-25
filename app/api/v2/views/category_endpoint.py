@@ -86,3 +86,19 @@ class SingleCategory(Resource):
                 'message': 'successfuly modified'
             },200
 
+
+    def delete(self, category_id):
+        """delete one category"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        category = Categories()
+        sql = category.delete_category()
+        cursor.execute(sql,(category_id,))
+        connection.commit()
+
+        return {
+                'message': 'successfuly deleted'
+            },200
+
