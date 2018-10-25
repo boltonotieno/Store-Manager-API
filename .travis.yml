@@ -9,10 +9,7 @@ services:
 install:
 - pip install -r requirements.txt
 - pip install codeclimate-test-reporter
-
-env:
-  - DB = postgres USER = postgres PASSWORD = root123! 
-
+ 
 before_script:
   - psql -c "CREATE DATABASE store_manager;" -U postgres
 
