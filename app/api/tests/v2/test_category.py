@@ -167,9 +167,9 @@ class TestCategory(unittest.TestCase):
         #user delete category
         response_delete = self.client.delete('/api/v2/category/1',
         headers = dict(Authorization='Bearer '+token))      
-        result_delete_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'successfuly deleted')
-        self.assertEqual(response_modify.status_code, 200)
+        result_delete_one = json.loads(response_delete.data)
+        self.assertEqual(result_delete_one['message'], 'successfuly deleted')
+        self.assertEqual(response_delete.status_code, 200)
 
         #Test if the category has been actually deleted by trying to GET it
         response_get = self.client.get('/api/v2/category/1',
