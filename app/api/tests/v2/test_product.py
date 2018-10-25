@@ -54,7 +54,7 @@ class TestProducts(unittest.TestCase):
         content_type='application/json')
         
         result = json.loads(response.data)
-        self.assertEqual(result['message'], 'Created successfully' )
+        self.assertEqual(result['message'], 'Product created successfully' )
         self.assertEqual(response.status_code, 201)
 
     def test_get_all_products(self):
@@ -140,7 +140,13 @@ class TestProducts(unittest.TestCase):
         #user modify product
         response_modify = self.client.put('/api/v2/products/1',
         headers = dict(Authorization='Bearer '+token),
-        data= json.dumps({'username' : 'jdoe'}),
+        data= json.dumps({
+            'name' : 'Pilsner',
+            'price' : '300',
+            'quantity' : '15',
+            'min_quantity' : '5',
+            'category' : 'beer'
+            }),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
         self.assertEqual(result_modify_one['message'], 'successfuly modified ')
