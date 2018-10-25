@@ -2,12 +2,22 @@ language: python
 
 python:
 - 3.6
+
+services:
+  - postgresql
+
 install:
 - pip install -r requirements.txt
 - pip install codeclimate-test-reporter
 
+env:
+  - DB = postgres USER = postgres PASSWORD = root123! 
+
+before_script:
+  - psql -c "CREATE DATABASE store_manager;" -U postgres
+
 script:
-- pytest --cov-report term-missing --cov=application
+- pytest --cov-report term-missing --cov=app
 - coveralls
 
 after_success:

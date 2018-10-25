@@ -3,6 +3,7 @@ import psycopg2
 from flask import jsonify
 from ..models.sale_model import Sales
 from ..models import db_connection
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims)
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
@@ -12,6 +13,7 @@ parser.add_argument('quantity', help = 'This field cannot be blank', required = 
 
 class Sale(Resource):
     
+    @jwt_required
     def post(self):
         """Post new sales"""
         connection = db_connection()
@@ -21,6 +23,16 @@ class Sale(Resource):
         name = data['name']
         price = data['price']
         quantity = data['quantity']
+
+        if name.isalpha() == False:
+            return {'message' : 'Invalid product name'}
+
+        if price.isdigit() == False:
+            return {'message' : 'Invalid product price'}
+        
+        if quantity.isdigit() == False:
+            return {'message' : 'Invalid product quantity'}
+
         
         try:
             new_sales = Sales()
@@ -34,7 +46,7 @@ class Sale(Resource):
         except:
             return {'message' : 'Sales Not Created'}
 
-
+    @jwt_required
     def get(self):
         """Get all sales"""
 
@@ -56,6 +68,8 @@ class Sale(Resource):
 
 
 class SingleSale(Resource):
+
+    @jwt_required
     def get(self, sale_id):
         """Get one sale"""
 
@@ -75,7 +89,7 @@ class SingleSale(Resource):
             'Sale' : data
         },200
 
-    
+    @jwt_required
     def put(self, sale_id):
         """Modify one Sale"""
 
@@ -100,6 +114,7 @@ class SingleSale(Resource):
         except:
             return {'message': 'Sale not found'}
 
+    @jwt_required
     def delete(self, sale_id):
         """delete one sale"""
 

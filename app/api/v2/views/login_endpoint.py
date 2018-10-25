@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 import psycopg2
 from ..models.user_model import Users
 from ..models import db_connection
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims)
 
 from passlib.hash import sha256_crypt
 from flask import jsonify
@@ -25,13 +26,17 @@ class Login(Resource):
         sql = user.get_user_by_username()
         cursor.execute(sql,(username,))
         data = cursor.fetchone()
+        
+        access_token = create_access_token(identity=username)
 
-        if data is None:
+        if not data:
             return {'message' : 'User named {} not found'.format( username)}
         
-        
-        # if sha256_crypt.verify(password, data[0][0]):
+        if password in data: 
+            return {
+                    'message' : 'Logged in succesful',
+                    'access_token' : access_token
+             }
+    
 
-        #     return {'message' : 'Logged in succesful'}
-
-        return {'message' : 'Logged in succesful'}
+        return {'message' : 'Invalid password'}
