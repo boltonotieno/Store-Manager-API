@@ -74,5 +74,27 @@ class SingleProduct(Resource):
             'User' : data
         },200
 
+    def put(self, product_id):
+        """Modify one Product"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        data = parser.parse_args()
+        name = data['name']
+        price = data['price']
+        quantity = data['quantity']
+        min_quantity = data['min_quantity']
+        category = data['category']
+
+        product = Products()
+        sql = product.modify_product()
+        cursor.execute(sql,(name,price,quantity,min_quantity,category,product_id,))
+        connection.commit()
+
+        return {
+                'message': 'successfuly modified',
+            },201
+
 
         

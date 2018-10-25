@@ -149,7 +149,7 @@ class TestProducts(unittest.TestCase):
             }),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'successfuly modified ')
+        self.assertEqual(result_modify_one['message'], 'successfuly modified')
         self.assertEqual(response_modify.status_code, 200)
 
     def test_delete_product(self):
