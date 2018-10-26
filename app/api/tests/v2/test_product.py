@@ -179,7 +179,7 @@ class TestProducts(unittest.TestCase):
         response_get = self.client.get('/api/v2/products/1',
         headers = dict(Authorization='Bearer '+token))
         result_get = json.loads(response_get.data)
-        self.assertEqual(result_get['message'], 'Product not found'])
+        self.assertEqual(result_get['message'], 'Product not found')
         self.assertEqual(response.status_code, 404)
 
 
