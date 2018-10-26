@@ -8,7 +8,7 @@ def db_connection():
 
     url = "dbname='store_manager' host='localhost' port='5432' user='postgres'"
     # url = "dbname='store_manager' host='localhost' port='5432' user='bolt' password='root123!'"
-    url = os.getenv('DATABASE_URL')          
+    # url = os.getenv('DATABASE_URL')          
     connection = psycopg2.connect(url)
     
     return connection
