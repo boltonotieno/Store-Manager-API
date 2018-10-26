@@ -64,4 +64,4 @@ class TestLogin(unittest.TestCase):
         self.app_context.pop()
         db = Users()
         db.drop_table_user()
-        
+      

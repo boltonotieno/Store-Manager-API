@@ -26,7 +26,7 @@ class Registration(Resource):
         name = data['name']
         username = data['username']
         email = data['email']
-        password = sha256_crypt.encrypt((data['password']))
+        password = data['password']
         gender = data['gender']
         role = data['role']
 
@@ -37,14 +37,18 @@ class Registration(Resource):
         except:
             return {'message' : 'Invalid Email'},400
         
-        new_user = Users()
-        sql = new_user.register_user()
-        cursor.execute(sql,(name,username,valid_email,password,gender,role))
-        connection.commit()
-        
-        return {
-                'message': 'User created successfully',
-            },201
+        try:
+            new_user = Users()
+            sql = new_user.register_user()
+            cursor.execute(sql,(name,username,valid_email,password,gender,role))
+            connection.commit()
+            
+            return {
+                    'message': 'User created successfully',
+                },201
+
+        except Exception as error:
+            return str(error)
 
     def get(self):
         """Get all Users"""
@@ -57,7 +61,7 @@ class Registration(Resource):
         cursor.execute(sql)
         data = cursor.fetchall()
 
-        if data is None:
+        if len(data) == 0:
             return {'message' : 'No users'}
 
         return {
@@ -85,5 +89,3 @@ class User(Resource):
             'User' : data
         },200
 
-
-        

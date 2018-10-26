@@ -3,13 +3,14 @@ import psycopg2
 from flask import jsonify
 from ..models.category_model import Categories
 from ..models import db_connection
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims)
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
 parser.add_argument('name', help = 'This field cannot be blank', required = True)
 
 class Category(Resource):
-
+    @jwt_required
     def post(self):
         """Post new category"""
         connection = db_connection()
@@ -18,18 +19,23 @@ class Category(Resource):
         data = parser.parse_args()
         name = data['name']
         
-        try:
-            new_category = Categories()
-            sql = new_category.create_category()
-            cursor.execute(sql,(name,))
-            connection.commit()
-            
-            return {
-                    'message': 'Category created successfully',
-                },201
-        except:
-            return {'message' : 'Category already exist'}
-
+        if name.isalpha() == False:
+            return{
+                'message' : 'Invalid category name'
+            }
+        else:
+            try:
+                new_category = Categories()
+                sql = new_category.create_category()
+                cursor.execute(sql,(name,))
+                connection.commit()
+                
+                return {
+                        'message': 'Category created successfully',
+                    },201
+            except:
+                return {'message' : 'Category already exist'}
+    @jwt_required
     def get(self):
         """Get all Categories"""
 
@@ -50,6 +56,7 @@ class Category(Resource):
             },200
 
 class SingleCategory(Resource):
+    @jwt_required
     def get(self, category_id):
         """Get one Category"""
 
@@ -69,7 +76,7 @@ class SingleCategory(Resource):
             'Category' : data
         },200
 
-
+    @jwt_required
     def put(self, category_id):
         """Modify one Category"""
 
@@ -92,7 +99,7 @@ class SingleCategory(Resource):
         except:
             return {'message': 'Category already exist'}
 
-
+    @jwt_required
     def delete(self, category_id):
         """delete one category"""
 

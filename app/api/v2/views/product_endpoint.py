@@ -3,6 +3,7 @@ import psycopg2
 from flask import jsonify
 from ..models.product_model import Products
 from ..models import db_connection
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims)
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
@@ -13,7 +14,7 @@ parser.add_argument('min_quantity', help = 'This field cannot be blank', require
 parser.add_argument('category', help = 'This field cannot be blank', required = True)
 
 class Product(Resource):
-
+    @jwt_required
     def post(self):
         """Post new products"""
         connection = db_connection()
@@ -25,7 +26,22 @@ class Product(Resource):
         quantity = data['quantity']
         min_quantity = data['min_quantity']
         category = data['category']
+
+        if name.isalpha() == False:
+            return {'message' : 'Invalid product name'}
+
+        if price.isdigit() == False:
+            return {'message' : 'Invalid product price'}
         
+        if quantity.isdigit() == False:
+            return {'message' : 'Invalid product quantity'}
+
+        if min_quantity.isdigit() == False:
+            return {'message' : 'Invalid product minimum quantity'}
+
+        if category.isalpha() == False:
+            return {'message' : 'Invalid product category'}
+
         try:
             new_product = Products()
             sql = new_product.create_product()
@@ -36,8 +52,9 @@ class Product(Resource):
                     'message': 'Product created successfully'
                 },201
         except:
-            return {'message' : 'Product already exist'}
+            return {'message' : 'Product {} already exist'.format(name)}
 
+    @jwt_required
     def get(self):
         """Get all Products"""
 
@@ -58,6 +75,7 @@ class Product(Resource):
             },200
 
 class SingleProduct(Resource):
+    @jwt_required
     def get(self, product_id):
         """Get one Product"""
 
@@ -68,7 +86,7 @@ class SingleProduct(Resource):
         sql = product.get_one_product()
         cursor.execute(sql,(product_id,))
         data = cursor.fetchone()
-
+        
         if data is None:
             return {'message' : 'Product not Found'}
 
@@ -77,6 +95,7 @@ class SingleProduct(Resource):
             'Product' : data
         },200
 
+    @jwt_required
     def put(self, product_id):
         """Modify one Product"""
 
@@ -90,6 +109,21 @@ class SingleProduct(Resource):
         min_quantity = data['min_quantity']
         category = data['category']
 
+        if name.isalpha() == False:
+            return {'message' : 'Invalid product name'}
+
+        if price.isdigit() == False:
+            return {'message' : 'Invalid product price'}
+        
+        if quantity.isdigit() == False:
+            return {'message' : 'Invalid product quantity'}
+
+        if min_quantity.isdigit() == False:
+            return {'message' : 'Invalid product minimum quantity'}
+
+        if category.isalpha() == False:
+            return {'message' : 'Invalid product category'}
+
         try:
             product = Products()
             sql = product.modify_product()
@@ -102,6 +136,7 @@ class SingleProduct(Resource):
         except:
             return {'message': 'Product already exist'}
 
+    @jwt_required
     def delete(self, product_id):
         """delete one Product"""
 
