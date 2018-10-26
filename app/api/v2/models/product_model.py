@@ -22,7 +22,7 @@ class Products:
         self.cursor.execute(sql)
         self.connection.commit()
 
-    def drop_table_peoducts(self):
+    def drop_table_products(self):
         """drop Table products"""
 
         sql="""DROP TABLE products"""
