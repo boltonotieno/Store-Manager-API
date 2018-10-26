@@ -28,8 +28,6 @@
   "app/api/tests/v2/test_registration.py::TestRegistration::test_get_user_by_id",
   "app/api/tests/v2/test_registration.py::TestRegistration::test_invalid_email",
   "app/api/tests/v2/test_registration.py::TestRegistration::test_registration",
-  "app/api/tests/v2/test_sale.py::TestSales::test_get_all_saless",
-  "app/api/tests/v2/test_sale.py::TestSales::test_get_sales_by_id",
   "app/api/tests/v2/test_sale.py::TestSales::test_modify_sales",
   "app/api/tests/v2/test_sale.py::TestSales::test_post_sale_with_empty_fields",
   "app/api/tests/v2/test_sale.py::TestSales::test_post_sales"
