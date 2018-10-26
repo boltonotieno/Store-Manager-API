@@ -2,6 +2,8 @@ import unittest
 import os
 import json
 from app import create_app
+from ...v2.models.user_model import Users
+from ...v2.models.category_model import Category
 
 class TestCategory(unittest.TestCase):
     """category TestCases Class"""
@@ -12,6 +14,14 @@ class TestCategory(unittest.TestCase):
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
+
+        with self.app.app_context():
+            # create all tables
+            db_user = Users()
+            db_category = Category()
+            db_user.create_table_user()
+            db_category.create_table_category()
+
         self.data = {
             'name' : 'beer'
         }
@@ -167,9 +177,9 @@ class TestCategory(unittest.TestCase):
         #user delete category
         response_delete = self.client.delete('/api/v2/category/1',
         headers = dict(Authorization='Bearer '+token))      
-        result_delete_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'successfuly deleted')
-        self.assertEqual(response_modify.status_code, 200)
+        result_delete_one = json.loads(response_delete.data)
+        self.assertEqual(result_delete_one['message'], 'successfuly deleted')
+        self.assertEqual(response_delete.status_code, 200)
 
         #Test if the category has been actually deleted by trying to GET it
         response_get = self.client.get('/api/v2/category/1',
@@ -182,6 +192,11 @@ class TestCategory(unittest.TestCase):
     def tearDown(self):
         """Removes all initialised variables"""
         self.app_context.pop()
+        self.app_context.pop()
+        db_user = Users()
+        db_category= Category()
+        db_user.drop_table_user()
+        db_category.drop_table_category()
 
 if __name__=='__main__':
     unittest.main()
