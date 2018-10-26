@@ -31,13 +31,13 @@ records.
 | POST     | /api/v2/auth/login        | Login a user      |
 | GET     | /api/v2/users        | Gets all users     |
 | GET     | /api/v2/users/user_id      |Gets a single user by id      |
-| POST     | /api/v2/product        | Add a product      |
+| POST     | /api/v2/products        | Add a product      |
 | POST     | /api/v2/sales        | Add a sales record      |
 | POST     | /api/v2/category       | Add category     |
-| GET     | /api/v2/product       | Retrieve all products     |
-| GET     | /api/v22/product/product_id       | Retrieve a single product by id     |
-| PUT     | /api/v2/product/product_id       | Modify single product    |
-| DELETE     | /api/v2/product/product_id       | DELETE single product    |
+| GET     | /api/v2/products       | Retrieve all products     |
+| GET     | /api/v22/products/product_id       | Retrieve a single product by id     |
+| PUT     | /api/v2/products/product_id       | Modify single product    |
+| DELETE     | /api/v2/products/product_id       | DELETE single product    |
 | GET     | /api/v2/sales       | Retrieve all sales records    |
 | GET     | /api/v2/sales/sale_id      | Retrieve a single sales record by id     |
 | GET     | /api/v2/category/category_id       | Retrieve single category    |
