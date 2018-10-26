@@ -37,14 +37,14 @@ class Sales:
     def get_all_sales(self):
         """Fetch all sales"""
 
-        sql="SELECT * FROM sales"
+        sql="SELECT name, price, quantity, price * quantity as total_amount FROM sales"
         
         return sql
 
     def get_one_sale(self):
         """Fetch sale by id"""
 
-        sql="SELECT * FROM sales WHERE saleid = %s"
+        sql="SELECT name, price, quantity, price * quantity as total_amount FROM sales WHERE saleid = %s"
         return sql
 
     def modify_sales(self):
