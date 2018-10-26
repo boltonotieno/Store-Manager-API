@@ -3,7 +3,7 @@ import os
 import json
 from app import create_app
 from ...v2.models.user_model import Users
-from ...v2.models.category_model import Category
+from ...v2.models.category_model import Categories
 
 class TestCategory(unittest.TestCase):
     """category TestCases Class"""
@@ -18,7 +18,7 @@ class TestCategory(unittest.TestCase):
         with self.app.app_context():
             # create all tables
             db_user = Users()
-            db_category = Category()
+            db_category = Categories()
             db_user.create_table_user()
             db_category.create_table_category()
 
@@ -60,7 +60,7 @@ class TestCategory(unittest.TestCase):
         content_type='application/json')
         
         result = json.loads(response.data)
-        self.assertEqual(result['message'], 'Created successfully' )
+        self.assertEqual(result['message'], 'Category created successfully' )
         self.assertEqual(response.status_code, 201)
 
     def test_get_all_category(self):
@@ -149,7 +149,7 @@ class TestCategory(unittest.TestCase):
         data= json.dumps({'name' : 'spirit'}),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'successfuly modified ')
+        self.assertEqual(result_modify_one['message'], 'successfuly modified')
         self.assertEqual(response_modify.status_code, 200)
 
     def test_delete_category(self):
@@ -185,16 +185,14 @@ class TestCategory(unittest.TestCase):
         response_get = self.client.get('/api/v2/category/1',
         headers = dict(Authorization='Bearer '+token))
         result_get = json.loads(response_get.data)
-        self.assertEqual(result_get['message'], 'category not found')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(result_get['message'], 'Category not Found')
 
 
     def tearDown(self):
         """Removes all initialised variables"""
         self.app_context.pop()
-        self.app_context.pop()
         db_user = Users()
-        db_category= Category()
+        db_category= Categories()
         db_user.drop_table_user()
         db_category.drop_table_category()
 

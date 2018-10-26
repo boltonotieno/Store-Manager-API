@@ -2,7 +2,7 @@ import psycopg2
 import os
 from ..models import db_connection
 
-class Category:
+class Categories:
     """Class contain category model functions"""
 
     connection = db_connection()
@@ -13,7 +13,7 @@ class Category:
 
         sql="""CREATE TABLE IF NOT EXISTS category(
         categoryid SERIAL PRIMARY KEY UNIQUE NOT NULL,
-        name VARCHAR(50) NOT NULL
+        name VARCHAR(50) UNIQUE NOT NULL
         )"""
         self.cursor.execute(sql)
         self.connection.commit()

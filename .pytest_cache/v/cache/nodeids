@@ -1,7 +1,7 @@
 [
-  "app/api/tests/v2/test_product.py::TestProducts::test_delete_product",
-  "app/api/tests/v2/test_product.py::TestProducts::test_get_all_products",
-  "app/api/tests/v2/test_product.py::TestProducts::test_get_product_by_id",
-  "app/api/tests/v2/test_product.py::TestProducts::test_modify_product",
-  "app/api/tests/v2/test_product.py::TestProducts::test_post_product"
+  "app/api/tests/v2/test_category.py::TestCategory::test_delete_category",
+  "app/api/tests/v2/test_category.py::TestCategory::test_get_all_category",
+  "app/api/tests/v2/test_category.py::TestCategory::test_get_category_by_id",
+  "app/api/tests/v2/test_category.py::TestCategory::test_modify_category",
+  "app/api/tests/v2/test_category.py::TestCategory::test_post_category"
 ]
