@@ -26,14 +26,17 @@ class Product(Resource):
         min_quantity = data['min_quantity']
         category = data['category']
         
-        new_product = Products()
-        sql = new_product.create_product()
-        cursor.execute(sql,(name,price,quantity,min_quantity,category))
-        connection.commit()
-        
-        return {
-                'message': 'Product created successfully',
-            },201
+        try:
+            new_product = Products()
+            sql = new_product.create_product()
+            cursor.execute(sql,(name,price,quantity,min_quantity,category))
+            connection.commit()
+            
+            return {
+                    'message': 'Product created successfully',
+                },201
+        except:
+            return {'message' : 'Product already exist'}
 
     def get(self):
         """Get all Products"""
@@ -87,14 +90,17 @@ class SingleProduct(Resource):
         min_quantity = data['min_quantity']
         category = data['category']
 
-        product = Products()
-        sql = product.modify_product()
-        cursor.execute(sql,(name,price,quantity,min_quantity,category,product_id))
-        connection.commit()
+        try:
+            product = Products()
+            sql = product.modify_product()
+            cursor.execute(sql,(name,price,quantity,min_quantity,category,product_id))
+            connection.commit()
 
-        return {
-                'message': 'successfuly modified'
-            },200
+            return {
+                    'message': 'successfuly modified'
+                },200
+        except:
+            return {'message': 'Product already exist'}
 
     def delete(self, product_id):
         """delete one Product"""
@@ -102,14 +108,16 @@ class SingleProduct(Resource):
         connection = db_connection()
         cursor = connection.cursor()
 
-        product = Products()
-        sql = product.delete_product()
-        cursor.execute(sql,(product_id,))
-        connection.commit()
+        try:
+            product = Products()
+            sql = product.delete_product()
+            cursor.execute(sql,(product_id,))
+            connection.commit()
 
-        return {
-                'message': 'successfuly deleted'
-            },200
-
+            return {
+                    'message': 'successfuly deleted'
+                },200
+        except:
+            return {'message' : 'Product not found'}
 
         
