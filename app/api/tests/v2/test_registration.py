@@ -2,8 +2,9 @@ import unittest
 import os
 import json
 from app import create_app
+from ...v2.models.user_model import Users
 
-class TestAuthentication(unittest.TestCase):
+class TestRegistration(unittest.TestCase):
     """Authentication TestCases Class"""
 
     def setUp(self):
@@ -12,6 +13,11 @@ class TestAuthentication(unittest.TestCase):
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
+
+        with self.app.app_context():
+            # create all tables
+            db = Users()
+            db.create_table_user()
         self.data = {
             'name' : 'Jane Doe',
             'username' : 'jdoe',
@@ -51,14 +57,14 @@ class TestAuthentication(unittest.TestCase):
         response = self.client.post('/api/v2/auth/signup', 
         data= json.dumps({
             'name' : 'Jane Doe',
+            'username' : 'jdoe',
             'email' : 'jdoegmail.com',
             'password' : 'jdoepass',
             'gender' : 'female',
             'role': 'admin'}),
         content_type='application/json')
-
         result = json.loads(response.data)
-        self.assertEqual(result['message'], {"Invalid Email"})
+        self.assertEqual(result['message'], "Invalid Email")
         self.assertEqual(response.status_code, 400)
 
     
@@ -66,9 +72,8 @@ class TestAuthentication(unittest.TestCase):
         """Test if API can GET all users"""
         response = self.client.post('/api/v2/auth/signup', 
         data= json.dumps(self.data),
-        content_type='application/json')
-        self.assertEqual(response.status_code, 201)
-        
+        content_type='application/json')        
+    
         response= self.client.get('/api/v2/users')
         result = json.loads(response.data)
         self.assertEqual(result['message'], 'success')
@@ -78,8 +83,7 @@ class TestAuthentication(unittest.TestCase):
         """Test if API can GET single user by id"""
         response = self.client.post('/api/v2/auth/signup', 
         data= json.dumps(self.data),
-        content_type='application/json')
-        self.assertEqual(response.status_code, 201)
+        content_type='application/json')        
 
         response = self.client.get('/api/v2/users/1')
         result = json.loads(response.data)
@@ -87,6 +91,8 @@ class TestAuthentication(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
-        """Removes all initialised variables"""
+        """Removes all initialised variables and Drops table"""
         self.app_context.pop()
+        db = Users()
+        db.drop_table_user()
 
