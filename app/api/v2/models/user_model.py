@@ -49,4 +49,11 @@ class Users:
 
         sql="SELECT * FROM users WHERE userid = %s"
         return sql
-        
+
+    def get_user_by_username(self):
+        """Fetch user by username"""
+
+        sql="SELECT password FROM users WHERE username = %s"
+        return sql
+
+
