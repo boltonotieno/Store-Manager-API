@@ -26,8 +26,9 @@ class TestLogin(unittest.TestCase):
             'password' : 'jdoepass'
         }
 
-     def test_login(self):
+    def test_login(self):
         """Test login of users"""  
+
         response = self.client.post('/api/v2/auth/registration', 
         data= json.dumps(self.data),
         content_type='application/json')

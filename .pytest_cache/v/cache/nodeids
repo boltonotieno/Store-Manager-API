@@ -1,14 +1,7 @@
 [
-  "app/api/tests/v1/test_product.py::TestProducts::test_get_all_products",
-  "app/api/tests/v1/test_product.py::TestProducts::test_get_product_by_id",
-  "app/api/tests/v1/test_product.py::TestProducts::test_post_product",
-  "app/api/tests/v1/test_registration_login.py::TestAuthentication::test_empty_fields",
-  "app/api/tests/v1/test_registration_login.py::TestAuthentication::test_get_all_users",
-  "app/api/tests/v1/test_registration_login.py::TestAuthentication::test_get_user_by_id",
-  "app/api/tests/v1/test_registration_login.py::TestAuthentication::test_login",
-  "app/api/tests/v1/test_registration_login.py::TestAuthentication::test_login_with_missing_field",
-  "app/api/tests/v1/test_registration_login.py::TestAuthentication::test_registration",
-  "app/api/tests/v1/test_sales.py::TestProducts::test_get_all_sales",
-  "app/api/tests/v1/test_sales.py::TestProducts::test_get_sale_by_id",
-  "app/api/tests/v1/test_sales.py::TestProducts::test_post_sale"
+  "app/api/tests/v2/test_product.py::TestProducts::test_delete_product",
+  "app/api/tests/v2/test_product.py::TestProducts::test_get_all_products",
+  "app/api/tests/v2/test_product.py::TestProducts::test_get_product_by_id",
+  "app/api/tests/v2/test_product.py::TestProducts::test_modify_product",
+  "app/api/tests/v2/test_product.py::TestProducts::test_post_product"
 ]
