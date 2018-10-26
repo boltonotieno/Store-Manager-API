@@ -33,7 +33,7 @@ class Product(Resource):
             connection.commit()
             
             return {
-                    'message': 'Product created successfully',
+                    'message': 'Product created successfully'
                 },201
         except:
             return {'message' : 'Product already exist'}
