@@ -20,5 +20,9 @@
   "app/api/tests/v2/test_registration.py::TestAuthentication::test_get_all_users": true,
   "app/api/tests/v2/test_registration.py::TestAuthentication::test_get_user_by_id": true,
   "app/api/tests/v2/test_registration.py::TestAuthentication::test_invalid_email": true,
-  "app/api/tests/v2/test_registration.py::TestAuthentication::test_registration": true
+  "app/api/tests/v2/test_registration.py::TestAuthentication::test_registration": true,
+  "app/api/tests/v2/test_sale.py::TestSales::test_get_all_saless": true,
+  "app/api/tests/v2/test_sale.py::TestSales::test_get_sales_by_id": true,
+  "app/api/tests/v2/test_sale.py::TestSales::test_post_sale_with_empty_fields": true,
+  "app/api/tests/v2/test_sale.py::TestSales::test_post_sales": true
 }
