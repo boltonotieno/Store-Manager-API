@@ -30,7 +30,8 @@ class Database():
             saleid SERIAL PRIMARY KEY UNIQUE NOT NULL,
             name VARCHAR(50) NOT NULL,
             price INTEGER NOT NULL,
-            quantity INTEGER NOT NULL
+            quantity INTEGER NOT NULL,
+            attendant VARCHAR(10) NOT NULL
             )"""
 
         self.query =[query_users,query_category,query_products,query_sales]

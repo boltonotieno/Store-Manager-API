@@ -39,8 +39,9 @@ class TestSales(unittest.TestCase):
             'email' : 'jdoe@gmail.com',
             'password' : 'jdoepass',
             'gender' : 'female',
-            'role': 'admin'
+            'role': 'attendant'
         }
+    
         self.data_login = {
             'username' : 'jdoe',
             'password' : 'jdoepass'
@@ -159,25 +160,47 @@ class TestSales(unittest.TestCase):
 
     def test_modify_sales(self):
         """Test if API can modify(PUT) a single sale"""
-        
+
         #register user
         response_reg = self.client.post('/api/v2/auth/signup', 
         data= json.dumps(self.data_reg),
         content_type='application/json')
 
-        #user login
+        #attendant login
         response_login = self.client.post('/api/v2/auth/login', 
         data= json.dumps(self.data_login),
         content_type='application/json')
         result_login = json.loads(response_login.data)
         token = result_login['access_token']
 
-        #user post sales
+        #attendant post sales
         response = self.client.post('/api/v2/sales',
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
+        
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps({
+            'name' : 'John Doe',
+            'username' : 'johnd',
+            'email' : 'johnd@gmail.com',
+            'password' : 'johndpass',
+            'gender' : 'male',
+            'role': 'admin'
+        }),
+        content_type='application/json')
+
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps({
+            'username' : 'johnd',
+            'password' : 'johndpass'
+        }),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
 
         #user modify sales
         response_modify = self.client.put('/api/v2/sales/1',
