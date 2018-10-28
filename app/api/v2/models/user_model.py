@@ -1,6 +1,7 @@
 import psycopg2
 import os
 from ..models import db_connection
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims, get_jwt_identity)
 
 class Users:
     """Class contain user model functions"""
@@ -55,5 +56,13 @@ class Users:
 
         sql="SELECT password FROM users WHERE username = %s"
         return sql
+
+    def get_user_role(self):
+        """Fetch user role"""
+        current_user = get_jwt_identity()
+        sql="SELECT role FROM users WHERE username = %s"
+        self.cursor.execute(sql,(current_user,))
+        role = self.cursor.fetchone()
+        return role
 
 
