@@ -12,11 +12,11 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
 parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
-connection = db_connection()
-cursor = connection.cursor()
-
 class Login(Resource):
     def post(self):
+
+        connection = db_connection()
+        cursor = connection.cursor()
 
         data = parser.parse_args()
         username = data['username']
@@ -27,6 +27,8 @@ class Login(Resource):
         cursor.execute(sql,(username,))
         data = cursor.fetchone()
     
+    
+
         if not data:
             return {'message' : 'User named {} not found'.format( username)}
         

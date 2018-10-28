@@ -10,42 +10,44 @@ from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claim
 parser = reqparse.RequestParser()
 parser.add_argument('name', help = 'This field cannot be blank', required = True)
 
-connection = db_connection()
-cursor = connection.cursor()
-
 class Category(Resource):
     @jwt_required
     def post(self):
         """Post new category: only by the admin"""
-        role = Users().get_user_role()
+        connection = db_connection()
+        cursor = connection.cursor()
 
-        data = parser.parse_args()
-        name = data['name']
+        role = Users().get_user_role()
 
         if role[0] != "admin":
             return {
                 "message" : "Access not allowed"
             },403
-        
+
+        data = parser.parse_args()
+        name = data['name']        
         if name.isalpha() == False:
             return{
                 'message' : 'Invalid category name'
             },400
-        else:
-            try:
-                new_category = Categories()
-                sql = new_category.create_category()
-                cursor.execute(sql,(name,))
-                connection.commit()
-                
-                return {
-                        'message': 'Category created successfully'
-                    },201
-            except:
-                return {'message' : 'Category already exist'},409
+        
+        try:
+            new_category = Categories()
+            sql = new_category.create_category()
+            cursor.execute(sql,(name,))
+            connection.commit()
+            cursor.close()    
+            return {
+                    'message': 'Category created successfully'
+                },201
+        except:
+            return {'message' : 'Category {} already exist'.format(name)},409
+
     @jwt_required
     def get(self):
         """Get all Categories"""
+        connection = db_connection()
+        cursor = connection.cursor()
 
         categories = Categories()
         sql = categories.get_all_category()
@@ -64,9 +66,11 @@ class SingleCategory(Resource):
     @jwt_required
     def get(self, category_id):
         """Get one Category"""
+        connection = db_connection()
+        cursor = connection.cursor()
 
-        category = Categories()
-        sql = category.get_one_category()
+        get_category = Categories()
+        sql = get_category.get_one_category()
         cursor.execute(sql,(category_id,))
         data = cursor.fetchone()
 
@@ -82,6 +86,9 @@ class SingleCategory(Resource):
     def put(self, category_id):
         """Modify one Category: only by the admin"""
 
+        connection = db_connection()
+        cursor = connection.cursor()
+
         role = Users().get_user_role()
 
         if role[0] != "admin":
@@ -93,8 +100,8 @@ class SingleCategory(Resource):
         name = data['name']
 
         try:
-            category = Categories()
-            sql = category.modify_category()
+            put_category = Categories()
+            sql = put_category.modify_category()
             cursor.execute(sql,(name,category_id))
             connection.commit()
 
@@ -109,6 +116,9 @@ class SingleCategory(Resource):
     def delete(self, category_id):
         """delete one category: only by the admin"""
 
+        connection = db_connection()
+        cursor = connection.cursor()
+
         role = Users().get_user_role()
 
         if role[0] != "admin":
@@ -116,8 +126,8 @@ class SingleCategory(Resource):
                 "message" : "Access not allowed"
             },403        
         try:
-            category = Categories()
-            sql = category.delete_category()
+            del_category = Categories()
+            sql = del_category.delete_category()
             cursor.execute(sql,(category_id,))
             connection.commit()
 

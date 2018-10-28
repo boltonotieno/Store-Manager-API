@@ -14,13 +14,12 @@ parser.add_argument('quantity', help = 'This field cannot be blank', required = 
 parser.add_argument('min_quantity', help = 'This field cannot be blank', required = True)
 parser.add_argument('category', help = 'This field cannot be blank', required = True)
 
-connection = db_connection()
-cursor = connection.cursor()
-
 class Product(Resource):
     @jwt_required
     def post(self):
         """Post new products: only by the admin"""
+        connection = db_connection()
+        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
@@ -67,6 +66,9 @@ class Product(Resource):
     def get(self):
         """Get all Products"""
 
+        connection = db_connection()
+        cursor = connection.cursor()
+
         products = Products()
         sql = products.get_all_products()
         cursor.execute(sql)
@@ -85,6 +87,9 @@ class SingleProduct(Resource):
     def get(self, product_id):
         """Get one Product"""
 
+        connection = db_connection()
+        cursor = connection.cursor()
+
         product = Products()
         sql = product.get_one_product()
         cursor.execute(sql,(product_id,))
@@ -101,6 +106,9 @@ class SingleProduct(Resource):
     @jwt_required
     def put(self, product_id):
         """Modify one Product: only by the admin """
+
+        connection = db_connection()
+        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
@@ -146,6 +154,9 @@ class SingleProduct(Resource):
     @jwt_required
     def delete(self, product_id):
         """delete one Product: only by the admin"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
 
         role = Users().get_user_role()
 

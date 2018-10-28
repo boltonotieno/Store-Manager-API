@@ -92,6 +92,9 @@ class SingleSale(Resource):
     def get(self, sale_id):
         """Get one sale: only by the admin and creator of the sale"""
 
+        connection = db_connection()
+        cursor = connection.cursor()
+
         #get creator of sale
         sale = Sales()
         sql = sale.get_attendant_from_sales()
@@ -158,6 +161,9 @@ class SingleSale(Resource):
     @jwt_required
     def delete(self, sale_id):
         """delete one sale : only by the admin"""
+
+        connection = db_connection()
+        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
