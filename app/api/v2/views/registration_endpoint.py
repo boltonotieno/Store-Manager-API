@@ -15,12 +15,13 @@ parser.add_argument('password', help = 'This field cannot be blank', required = 
 parser.add_argument('gender', help = 'This field cannot be blank', required = True)
 parser.add_argument('role', help = 'This field cannot be blank', required = True)
 
+connection = db_connection()
+cursor = connection.cursor()
+
 class Registration(Resource):
 
     def post(self):
         """Post new users"""
-        connection = db_connection()
-        cursor = connection.cursor()
 
         data = parser.parse_args()
         name = data['name']
@@ -53,9 +54,6 @@ class Registration(Resource):
     def get(self):
         """Get all Users"""
 
-        connection = db_connection()
-        cursor = connection.cursor()
-
         users = Users()
         sql = users.get_all_users()
         cursor.execute(sql)
@@ -72,9 +70,6 @@ class Registration(Resource):
 class User(Resource):
     def get(self, user_id):
         """Get one User"""
-
-        connection = db_connection()
-        cursor = connection.cursor()
 
         users = Users()
         sql = users.get_one_user()

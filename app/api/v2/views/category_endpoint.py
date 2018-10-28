@@ -10,13 +10,13 @@ from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claim
 parser = reqparse.RequestParser()
 parser.add_argument('name', help = 'This field cannot be blank', required = True)
 
+connection = db_connection()
+cursor = connection.cursor()
+
 class Category(Resource):
     @jwt_required
     def post(self):
         """Post new category: only by the admin"""
-        connection = db_connection()
-        cursor = connection.cursor()
-
         role = Users().get_user_role()
 
         data = parser.parse_args()
@@ -47,9 +47,6 @@ class Category(Resource):
     def get(self):
         """Get all Categories"""
 
-        connection = db_connection()
-        cursor = connection.cursor()
-
         categories = Categories()
         sql = categories.get_all_category()
         cursor.execute(sql)
@@ -68,9 +65,6 @@ class SingleCategory(Resource):
     def get(self, category_id):
         """Get one Category"""
 
-        connection = db_connection()
-        cursor = connection.cursor()
-
         category = Categories()
         sql = category.get_one_category()
         cursor.execute(sql,(category_id,))
@@ -87,9 +81,6 @@ class SingleCategory(Resource):
     @jwt_required
     def put(self, category_id):
         """Modify one Category: only by the admin"""
-
-        connection = db_connection()
-        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
@@ -117,9 +108,6 @@ class SingleCategory(Resource):
     @jwt_required
     def delete(self, category_id):
         """delete one category: only by the admin"""
-
-        connection = db_connection()
-        cursor = connection.cursor()
 
         role = Users().get_user_role()
 

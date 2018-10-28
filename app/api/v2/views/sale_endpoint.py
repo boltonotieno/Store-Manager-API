@@ -12,13 +12,15 @@ parser.add_argument('name', help = 'This field cannot be blank', required = True
 parser.add_argument('price', help = 'This field cannot be blank', required = True)
 parser.add_argument('quantity', help = 'This field cannot be blank', required = True)
 
+connection = db_connection()
+cursor = connection.cursor()
+
 class Sale(Resource):
+
     
     @jwt_required
     def post(self):
         """Post new sales: only by the attendant"""
-        connection = db_connection()
-        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
@@ -58,9 +60,6 @@ class Sale(Resource):
     def get(self):
         """Get all sales"""
 
-        connection = db_connection()
-        cursor = connection.cursor()
-
         role = Users().get_user_role()
 
         if role[0] != "admin":
@@ -92,9 +91,6 @@ class SingleSale(Resource):
     @jwt_required
     def get(self, sale_id):
         """Get one sale: only by the admin and creator of the sale"""
-
-        connection = db_connection()
-        cursor = connection.cursor()
 
         #get creator of sale
         sale = Sales()
@@ -162,9 +158,6 @@ class SingleSale(Resource):
     @jwt_required
     def delete(self, sale_id):
         """delete one sale : only by the admin"""
-
-        connection = db_connection()
-        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
