@@ -13,15 +13,14 @@ parser.add_argument('name', help = 'This field cannot be blank', required = True
 parser.add_argument('price', help = 'This field cannot be blank', required = True)
 parser.add_argument('quantity', help = 'This field cannot be blank', required = True)
 
-connection = db_connection()
-cursor = connection.cursor()
 
 class Sale(Resource):
-
     
     @jwt_required
     def post(self):
         """Post new sales: only by the attendant"""
+        connection = db_connection()
+        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
