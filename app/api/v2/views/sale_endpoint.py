@@ -36,8 +36,8 @@ class Sale(Resource):
         quantity = data['quantity']
         attendant = get_jwt_identity()
 
-        if Validation(data).validate_sales:
-            return Validation(data).validate_sales
+        if Validation(data).validate_sales():
+            return Validation(data).validate_sales()
 
         new_sales = Sales()
         sql = new_sales.create_sales()
