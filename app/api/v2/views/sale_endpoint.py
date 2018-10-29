@@ -5,6 +5,7 @@ from ..models.sale_model import Sales
 from ..models.user_model import Users
 from ..models import db_connection
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims, get_jwt_identity)
+from ..utils import Validation
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
@@ -35,14 +36,8 @@ class Sale(Resource):
         quantity = data['quantity']
         attendant = get_jwt_identity()
 
-        if name.isalpha() == False:
-            return {'message' : 'Invalid product name'},400
-
-        if price.isdigit() == False:
-            return {'message' : 'Invalid product price'},400
-        
-        if quantity.isdigit() == False:
-            return {'message' : 'Invalid product quantity'},400
+        if Validation(data).validate_sales:
+            return Validation(data).validate_sales
 
         new_sales = Sales()
         sql = new_sales.create_sales()
@@ -144,6 +139,9 @@ class SingleSale(Resource):
         name = data['name']
         price = data['price']
         quantity = data['quantity']
+
+        if Validation(data).validate_sales():
+            return Validation(data).validate_sales()
 
         try:
             sale = Sales()
