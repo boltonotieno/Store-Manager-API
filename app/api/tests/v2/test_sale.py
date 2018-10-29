@@ -39,8 +39,9 @@ class TestSales(unittest.TestCase):
             'email' : 'jdoe@gmail.com',
             'password' : 'jdoepass',
             'gender' : 'female',
-            'role': 'admin'
+            'role': 'attendant'
         }
+    
         self.data_login = {
             'username' : 'jdoe',
             'password' : 'jdoepass'
@@ -96,88 +97,49 @@ class TestSales(unittest.TestCase):
         self.assertEqual(result['message'], {"quantity": "This field cannot be blank"})
         self.assertEqual(response.status_code, 400)
 
-
-    # def test_get_all_saless(self):
-    #     """Test if API can GET all saless"""
-
-    #     #register user
-    #     response_reg = self.client.post('/api/v2/auth/signup', 
-    #     data= json.dumps(self.data),
-    #     content_type='application/json')
-
-    #     #user login
-    #     response_login = self.client.post('/api/v2/auth/login', 
-    #     data= json.dumps(self.data_login),
-    #     content_type='application/json')
-    #     result_login = json.loads(response_login.data)
-    #     token = result_login['access_token']
-
-    #     #user post sales
-    #     response_post = self.client.post('/api/v2/sales',
-    #     headers = dict(Authorization='Bearer '+token),
-    #     data= json.dumps(self.data),
-    #     content_type='application/json')
-    #     self.assertEqual(response_post.status_code, 201)
-
-        
-    #     #user get all saless
-    #     response_get= self.client.get('/api/v2/sales',
-    #     headers = dict(Authorization='Bearer '+token))
-    #     result_get = json.loads(response_get.data)
-    #     self.assertEqual(result_get['message'], 'success')
-    #     self.assertEqual(response_get.status_code, 200)
-
-    # def test_get_sales_by_id(self):
-    #     """Test if API can GET single sales by id"""
-
-    #     #register user
-    #     response_reg = self.client.post('/api/v2/auth/signup', 
-    #     data= json.dumps(self.data),
-    #     content_type='application/json')
-
-    #     #user login
-    #     response_login = self.client.post('/api/v2/auth/login', 
-    #     data= json.dumps(self.data_login),
-    #     content_type='application/json')
-    #     result_login = json.loads(response_login.data)
-    #     token = result_login['access_token']
-
-    #     #user post sales
-    #     response = self.client.post('/api/v2/sales', 
-    #     headers = dict(Authorization='Bearer '+token),
-    #     data= json.dumps(self.data),
-    #     content_type='application/json')
-    #     self.assertEqual(response.status_code, 201)
-
-    #     #user get one sales
-    #     response = self.client.get('/api/v2/sales/1',
-    #     headers = dict(Authorization='Bearer '+token))
-    #     result_get_one = json.loads(response.data)
-    #     self.assertEqual(result_get_one['message'], 'success')
-    #     self.assertEqual(response.status_code, 200)
-
-
     def test_modify_sales(self):
         """Test if API can modify(PUT) a single sale"""
-        
+
         #register user
         response_reg = self.client.post('/api/v2/auth/signup', 
         data= json.dumps(self.data_reg),
         content_type='application/json')
 
-        #user login
+        #attendant login
         response_login = self.client.post('/api/v2/auth/login', 
         data= json.dumps(self.data_login),
         content_type='application/json')
         result_login = json.loads(response_login.data)
         token = result_login['access_token']
 
-        #user post sales
+        #attendant post sales
         response = self.client.post('/api/v2/sales',
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
+        
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup', 
+        data= json.dumps({
+            'name' : 'John Doe',
+            'username' : 'johnd',
+            'email' : 'johnd@gmail.com',
+            'password' : 'johndpass',
+            'gender' : 'male',
+            'role': 'admin'
+        }),
+        content_type='application/json')
+
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps({
+            'username' : 'johnd',
+            'password' : 'johndpass'
+        }),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
 
         #user modify sales
         response_modify = self.client.put('/api/v2/sales/1',

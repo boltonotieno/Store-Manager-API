@@ -2,8 +2,9 @@ from flask_restful import Resource, reqparse
 import psycopg2
 from flask import jsonify
 from ..models.product_model import Products
+from ..models.user_model import Users
 from ..models import db_connection
-from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims)
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims, get_jwt_identity)
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
@@ -16,9 +17,16 @@ parser.add_argument('category', help = 'This field cannot be blank', required = 
 class Product(Resource):
     @jwt_required
     def post(self):
-        """Post new products"""
+        """Post new products: only by the admin"""
         connection = db_connection()
         cursor = connection.cursor()
+
+        role = Users().get_user_role()
+
+        if role[0] != "admin":
+            return {
+                "message" : "Access not allowed"
+            },403
 
         data = parser.parse_args()
         name = data['name']
@@ -28,19 +36,19 @@ class Product(Resource):
         category = data['category']
 
         if name.isalpha() == False:
-            return {'message' : 'Invalid product name'}
+            return {'message' : 'Invalid product name'},400
 
         if price.isdigit() == False:
-            return {'message' : 'Invalid product price'}
+            return {'message' : 'Invalid product price'},400
         
         if quantity.isdigit() == False:
-            return {'message' : 'Invalid product quantity'}
+            return {'message' : 'Invalid product quantity'},400
 
         if min_quantity.isdigit() == False:
-            return {'message' : 'Invalid product minimum quantity'}
+            return {'message' : 'Invalid product minimum quantity'},400
 
         if category.isalpha() == False:
-            return {'message' : 'Invalid product category'}
+            return {'message' : 'Invalid product category'},400
 
         try:
             new_product = Products()
@@ -52,7 +60,7 @@ class Product(Resource):
                     'message': 'Product created successfully'
                 },201
         except:
-            return {'message' : 'Product {} already exist'.format(name)}
+            return {'message' : 'Product {} already exist'.format(name)},409
 
     @jwt_required
     def get(self):
@@ -88,7 +96,7 @@ class SingleProduct(Resource):
         data = cursor.fetchone()
         
         if data is None:
-            return {'message' : 'Product not Found'}
+            return {'message' : 'Product not Found'},404
 
         return {
             'message' : 'success',
@@ -97,10 +105,17 @@ class SingleProduct(Resource):
 
     @jwt_required
     def put(self, product_id):
-        """Modify one Product"""
+        """Modify one Product: only by the admin """
 
         connection = db_connection()
         cursor = connection.cursor()
+
+        role = Users().get_user_role()
+
+        if role[0] != "admin":
+            return {
+                "message" : "Access not allowed"
+            },403
 
         data = parser.parse_args()
         name = data['name']
@@ -110,19 +125,19 @@ class SingleProduct(Resource):
         category = data['category']
 
         if name.isalpha() == False:
-            return {'message' : 'Invalid product name'}
+            return {'message' : 'Invalid product name'},400
 
         if price.isdigit() == False:
-            return {'message' : 'Invalid product price'}
+            return {'message' : 'Invalid product price'},400
         
         if quantity.isdigit() == False:
-            return {'message' : 'Invalid product quantity'}
+            return {'message' : 'Invalid product quantity'},400
 
         if min_quantity.isdigit() == False:
-            return {'message' : 'Invalid product minimum quantity'}
+            return {'message' : 'Invalid product minimum quantity'},400
 
         if category.isalpha() == False:
-            return {'message' : 'Invalid product category'}
+            return {'message' : 'Invalid product category'},400
 
         try:
             product = Products()
@@ -134,14 +149,21 @@ class SingleProduct(Resource):
                     'message': 'successfuly modified'
                 },200
         except:
-            return {'message': 'Product already exist'}
+            return {'message': 'Product already exist'},409
 
     @jwt_required
     def delete(self, product_id):
-        """delete one Product"""
+        """delete one Product: only by the admin"""
 
         connection = db_connection()
         cursor = connection.cursor()
+
+        role = Users().get_user_role()
+
+        if role[0] != "admin":
+            return {
+                "message" : "Access not allowed"
+            },403
 
         try:
             product = Products()
@@ -153,6 +175,6 @@ class SingleProduct(Resource):
                     'message': 'successfuly deleted'
                 },200
         except:
-            return {'message' : 'Product not found'}
+            return {'message' : 'Product not found'},404
 
         
