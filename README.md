@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/BoltC0rt3z/Store-Manager-API.svg?branch=develop)](https://travis-ci.org/BoltC0rt3z/Store-Manager-API)
 [![Coverage Status](https://coveralls.io/repos/github/BoltC0rt3z/Store-Manager-API/badge.svg?branch=develop)](https://coveralls.io/github/BoltC0rt3z/Store-Manager-API?branch=develop)
 
-
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2d0065cf05d793676667)
 
 Store Manager is a web application that helps store owners manage sales and product inventory
