@@ -5,6 +5,7 @@ from ..models.sale_model import Sales
 from ..models.user_model import Users
 from ..models import db_connection
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims, get_jwt_identity)
+from ..utils import Validation
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
@@ -13,7 +14,6 @@ parser.add_argument('price', help = 'This field cannot be blank', required = Tru
 parser.add_argument('quantity', help = 'This field cannot be blank', required = True)
 
 connection = db_connection()
-cursor = connection.cursor()
 
 class Sale(Resource):
 
@@ -22,6 +22,7 @@ class Sale(Resource):
     def post(self):
         """Post new sales: only by the attendant"""
 
+        cursor = connection.cursor()
         role = Users().get_user_role()
 
         if role[0] != "attendant":
@@ -35,14 +36,8 @@ class Sale(Resource):
         quantity = data['quantity']
         attendant = get_jwt_identity()
 
-        if name.isalpha() == False:
-            return {'message' : 'Invalid product name'},400
-
-        if price.isdigit() == False:
-            return {'message' : 'Invalid product price'},400
-        
-        if quantity.isdigit() == False:
-            return {'message' : 'Invalid product quantity'},400
+        if Validation(data).validate_sales():
+            return Validation(data).validate_sales()
 
         new_sales = Sales()
         sql = new_sales.create_sales()
@@ -59,6 +54,7 @@ class Sale(Resource):
     @jwt_required
     def get(self):
         """Get all sales"""
+        cursor = connection.cursor()
 
         role = Users().get_user_role()
 
@@ -92,7 +88,7 @@ class SingleSale(Resource):
     def get(self, sale_id):
         """Get one sale: only by the admin and creator of the sale"""
 
-        connection = db_connection()
+        
         cursor = connection.cursor()
 
         #get creator of sale
@@ -130,7 +126,7 @@ class SingleSale(Resource):
     def put(self, sale_id):
         """Modify one Sale: only by the admin"""
 
-        connection = db_connection()
+        
         cursor = connection.cursor()
 
         role = Users().get_user_role()
@@ -144,6 +140,9 @@ class SingleSale(Resource):
         name = data['name']
         price = data['price']
         quantity = data['quantity']
+
+        if Validation(data).validate_sales():
+            return Validation(data).validate_sales()
 
         try:
             sale = Sales()
@@ -162,7 +161,6 @@ class SingleSale(Resource):
     def delete(self, sale_id):
         """delete one sale : only by the admin"""
 
-        connection = db_connection()
         cursor = connection.cursor()
 
         role = Users().get_user_role()
