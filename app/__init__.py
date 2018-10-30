@@ -3,6 +3,7 @@ from instance.config import app_config
 from flask_jwt_extended import JWTManager
 from .api.v2.models.user_model import Users
 from app.api.v2.models import create_tables
+from app.api.v2.views.login_endpoint import TOKEN_BLACKLIST
 
 # Create the applicatiion
 def create_app(config_name):
@@ -13,7 +14,16 @@ def create_app(config_name):
     app.config.from_pyfile('config.py')
     app.config['SECRET_KEY'] = 'the-secret-secret'
     app.config['JWT_SECRET_KEY'] = 'secret'
+    app.config['JWT_BLACKLIST_ENABLED'] = True
+    app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
+
     jwt=JWTManager(app)
+
+    @jwt.token_in_blacklist_loader
+    def check_if_token_blacklist(decrypted_token):
+        """checks if jti(unique identifier) is in the token blacklist set"""
+        jti = decrypted_token['jti']
+        return jti in TOKEN_BLACKLIST
 
     # register Blueprint
     from .api.v1 import version1 as v1

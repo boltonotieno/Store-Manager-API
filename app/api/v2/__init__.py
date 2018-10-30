@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint
 from flask_restful import Api
 from .views.registration_endpoint import Registration, User
-from .views.login_endpoint import Login
+from .views.login_endpoint import Login, Logout
 from .views.product_endpoint import Product, SingleProduct
 from .views.category_endpoint import Category, SingleCategory
 from .views.sale_endpoint import Sale, SingleSale
@@ -12,6 +12,7 @@ api = Api(version2)
 
 api.add_resource(Registration, '/auth/signup', '/users')
 api.add_resource(Login, '/auth/login')
+api.add_resource(Logout, '/auth/logout')
 api.add_resource(User, '/users/<int:user_id>')
 api.add_resource(Product, '/products')
 api.add_resource(SingleProduct, '/products/<int:product_id>')

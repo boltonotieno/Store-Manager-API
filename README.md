@@ -28,6 +28,7 @@ records.
 | :---         |     :---       |          :--- |
 | POST   | /api/v2/auth/signup     | Creates a user account    |
 | POST     | /api/v2/auth/login        | Login a user      |
+| DELETE     | /api/v2/auth/logout        | Logout a user      |
 | GET     | /api/v2/users        | Gets all users     |
 | GET     | /api/v2/users/user_id      |Gets a single user by id      |
 | POST     | /api/v2/products        | Add a product      |
