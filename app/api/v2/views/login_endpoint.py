@@ -29,8 +29,6 @@ class Login(Resource):
         cursor.execute(sql,(username,))
         data = cursor.fetchone()
     
-    
-
         if not data:
             return {'message' : 'User named {} not found'.format( username)}
         
@@ -41,7 +39,6 @@ class Login(Resource):
                     'access_token' : access_token
              }
     
-
         return {'message' : 'Invalid password'}
 
 
@@ -49,7 +46,9 @@ class Logout(Resource):
 
     @jwt_required
     def delete(self):
-        """ Logs out a user by revoking the access token """
+        """ Logs out a user by revoking the access token,
+        this is done by adding the token jti to the blacklist set  
+        """
         jti = get_raw_jwt()['jti']
         try:
             TOKEN_BLACKLIST.add(jti)
