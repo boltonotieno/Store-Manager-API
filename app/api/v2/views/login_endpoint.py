@@ -2,10 +2,12 @@ from flask_restful import Resource, reqparse
 import psycopg2
 from ..models.user_model import Users
 from ..models import db_connection
-from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims, get_jwt_identity, get_current_user)
-
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims, get_jwt_identity,
+get_current_user, get_raw_jwt)
 from passlib.hash import sha256_crypt
 from flask import jsonify
+
+TOKEN_BLACKLIST = set()
 
 #passing incoming data into post requests
 parser = reqparse.RequestParser()
@@ -14,7 +16,7 @@ parser.add_argument('password', help = 'This field cannot be blank', required = 
 
 class Login(Resource):
     def post(self):
-
+        """Logs in a User"""
         connection = db_connection()
         cursor = connection.cursor()
 
@@ -41,3 +43,17 @@ class Login(Resource):
     
 
         return {'message' : 'Invalid password'}
+
+
+class Logout(Resource):
+
+    @jwt_required
+    def delete(self):
+        """ Logs out a user by revoking the access token """
+        jti = get_raw_jwt()['jti']
+        try:
+            TOKEN_BLACKLIST.add(jti)
+            return {"message": "Logged out succesful"}, 200
+        except:
+            return {'message': 'Something went wrong'}, 500
+
