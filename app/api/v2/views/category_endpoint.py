@@ -1,3 +1,4 @@
+import re
 from flask_restful import Resource, reqparse
 import psycopg2
 from flask import jsonify
@@ -18,17 +19,17 @@ class Category(Resource):
         cursor = connection.cursor()
 
         role = Users().get_user_role()
-
+        print(role)
         if role[0] != "admin":
             return {
                 "message" : "Access not allowed"
             },403
 
         data = parser.parse_args()
-        name = data['name']        
+        name = data['name'].lower()        
         if name.isalpha() == False:
             return{
-                'message' : 'Invalid category name'
+                'message' : 'Invalid category name {}'.format(name)
             },400
         
         try:
@@ -36,9 +37,16 @@ class Category(Resource):
             sql = new_category.create_category()
             cursor.execute(sql,(name,))
             connection.commit()
-            cursor.close()    
+
+            #fetch the added category
+            data = Categories().get_category__by_name(name)
+            data_dict = {'id' : data[0],
+                        'name' : data[1],
+                    }
+
             return {
-                    'message': 'Category created successfully'
+                    'message' : 'Category created successfully',
+                    'Category' : data_dict
                 },201
         except:
             return {'message' : 'Category {} already exist'.format(name)},409
@@ -57,34 +65,44 @@ class Category(Resource):
         if len(data) == 0:
             return {'message' : 'No categories'}
 
+        data_list = []
+        for datum in data:  
+            data_dict = {'id' : datum[0],
+                        'name' : datum[1],
+                        }
+            data_list.append(data_dict)
+
         return {
-                'message' : 'success',
-                'Categories' : data
+                'message' : 'Categories successfully retrieved',
+                'Categories' : data_list
             },200
 
 class SingleCategory(Resource):
     @jwt_required
     def get(self, category_id):
         """Get one Category"""
-        connection = db_connection()
-        cursor = connection.cursor()
+        if category_id.isdigit() == False:
+            return {'message' : 'Category id {} is invalid'.format(category_id)},400
 
-        get_category = Categories()
-        sql = get_category.get_one_category()
-        cursor.execute(sql,(category_id,))
-        data = cursor.fetchone()
+        data = Categories().get_one_category(category_id)
 
         if data is None:
-            return {'message' : 'Category not Found'},404
+            return {'message' : 'Category id {} not Found'.format(category_id)},404
+
+        data_dict = {'id' : data[0],
+                    'name' : data[1],
+                    }        
 
         return {
-            'message' : 'success',
-            'Category' : data
+            'message' : 'Categories successfully retrieved',
+            'Category' : data_dict
         },200
 
     @jwt_required
     def put(self, category_id):
         """Modify one Category: only by the admin"""
+        if category_id.isdigit() == False:
+            return {'message' : 'Category id {} is invalid'.format(category_id)},400
 
         connection = db_connection()
         cursor = connection.cursor()
@@ -97,7 +115,12 @@ class SingleCategory(Resource):
             },403
 
         data = parser.parse_args()
-        name = data['name']
+        name = data['name'].lower()       
+        if name.isalpha() == False:
+            return{
+                'message' : 'Invalid category name {}'.format(name)
+            },400
+
 
         try:
             put_category = Categories()
@@ -105,16 +128,26 @@ class SingleCategory(Resource):
             cursor.execute(sql,(name,category_id))
             connection.commit()
 
+            data = Categories().get_one_category(category_id)
+            if data is None:
+                return {'message' : 'Category id {} not Found'.format(category_id)},404
+                
+            data_dict = {'id' : data[0],
+                        'name' : data[1],
+                    }        
             return {
-                    'message': 'successfuly modified'
+                    'message': 'Category id {} successfuly modified'.format(category_id),
+                    'Category' : data_dict
                 },200
                 
         except:
-            return {'message': 'Category already exist'},409
+            return {'message': 'Category {} already exist'.format(name)},409
 
     @jwt_required
     def delete(self, category_id):
         """delete one category: only by the admin"""
+        if category_id.isdigit() == False:
+            return {'message' : 'Category id {} is invalid'.format(category_id)},400
 
         connection = db_connection()
         cursor = connection.cursor()
@@ -125,16 +158,23 @@ class SingleCategory(Resource):
             return {
                 "message" : "Access not allowed"
             },403        
+        
         try:
             del_category = Categories()
             sql = del_category.delete_category()
             cursor.execute(sql,(category_id,))
             connection.commit()
 
-            return {
-                  'message': 'successfuly deleted'
-              },200
+            data = Categories().get_one_category(category_id)
+            if data is None:
+                return {'message' : 'Category id {} not Found'.format(category_id)},404
 
-        except:
-            return {'message' : 'Category not found'},404
+            return {
+                'message': 'Category id {} successfuly deleted'.format(category_id)
+            },200
+
+        except Exception as e:
+            print(e)
+            return {'message' : 'There exist a product with category_id {}'.format(category_id)},400
+        
 
