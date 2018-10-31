@@ -22,12 +22,16 @@ class TestProducts(unittest.TestCase):
             db_user.create_table_user()
             db_product.create_table_products()
 
+        self.data_cat = {
+            'name' : 'beer'
+            }
+
         self.data = {
             'name' : 'Pilsner',
             'price' : '200',
             'quantity' : '20',
             'min_quantity' : '5',
-            'category' : 'beer'
+            'category_id' : '1'
         }
         self.data_reg = {
             'name' : 'Jane Doe',
@@ -56,6 +60,12 @@ class TestProducts(unittest.TestCase):
         content_type='application/json')
         result_login = json.loads(response_login.data)
         token = result_login['access_token']
+
+        #user post category
+        response = self.client.post('/api/v2/category', 
+        headers = dict(Authorization='Bearer '+token),
+        data= json.dumps(self.data_cat),
+        content_type='application/json')
 
         #user post product
         response = self.client.post('/api/v2/products', 
@@ -93,7 +103,7 @@ class TestProducts(unittest.TestCase):
         response= self.client.get('/api/v2/products',
         headers = dict(Authorization='Bearer '+token))
         result_get = json.loads(response.data)
-        self.assertEqual(result_get['message'], 'success')
+        self.assertEqual(result_get['message'], 'Products successfully retrieved')
         self.assertEqual(response.status_code, 200)
 
     def test_get_product_by_id(self):
@@ -122,7 +132,7 @@ class TestProducts(unittest.TestCase):
         response = self.client.get('/api/v2/products/1',
         headers = dict(Authorization='Bearer '+token))
         result_get_one = json.loads(response.data)
-        self.assertEqual(result_get_one['message'], 'success')
+        self.assertEqual(result_get_one['message'], 'Product successfully retrieved')
         self.assertEqual(response.status_code, 200)
 
     def test_modify_product(self):
@@ -159,7 +169,7 @@ class TestProducts(unittest.TestCase):
             }),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'successfuly modified')
+        self.assertEqual(result_modify_one['message'], 'Product id 1 successfuly modified')
         self.assertEqual(response_modify.status_code, 200)
 
     def test_delete_product(self):
@@ -188,7 +198,7 @@ class TestProducts(unittest.TestCase):
         response_delete = self.client.delete('/api/v2/products/1',
         headers = dict(Authorization='Bearer '+token))      
         result_delete_one = json.loads(response_delete.data)
-        self.assertEqual(result_delete_one['message'], 'successfuly deleted')
+        self.assertEqual(result_delete_one['message'], 'Product id 1 successfuly deleted')
         self.assertEqual(response_delete.status_code, 200)
 
     def tearDown(self):

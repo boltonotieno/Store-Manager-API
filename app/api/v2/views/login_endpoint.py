@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 import psycopg2
+import datetime
 from ..models.user_model import Users
 from ..models import db_connection
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_claims, get_jwt_identity,
@@ -33,7 +34,8 @@ class Login(Resource):
             return {'message' : 'User named {} not found'.format( username)}
         
         if password in data:
-            access_token = create_access_token(identity=username)
+            expire_time = datetime.timedelta(minutes=30)
+            access_token = create_access_token(identity=username, expires_delta=expire_time)
             return {
                     'message' : 'Logged in succesful',
                     'access_token' : access_token

@@ -17,7 +17,7 @@ class Products:
         price INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
         min_quantity INTEGER NOT NULL,
-        category VARCHAR(15) NOT NULL
+        categoryid INTEGER REFERENCES category(categoryid) ON DELETE RESTRICT
         )"""
         self.cursor.execute(sql)
         self.connection.commit()
@@ -25,14 +25,14 @@ class Products:
     def drop_table_products(self):
         """drop Table products"""
 
-        sql="""DROP TABLE products"""
+        sql="""DROP TABLE products CASCADE"""
         self.cursor.execute(sql)
         self.connection.commit()
 
     def create_product(self):
         """creates a new product"""
 
-        sql="""INSERT INTO products(name,price,quantity,min_quantity,category) VALUES(%s,%s,%s,%s,%s)"""
+        sql="""INSERT INTO products(name,price,quantity,min_quantity,categoryid) VALUES(%s,%s,%s,%s,%s)"""
 
         return sql
 
@@ -43,11 +43,14 @@ class Products:
         
         return sql
 
-    def get_one_product(self):
+    def get_one_product(self, product_id):
         """Fetch product by id"""
 
         sql="SELECT * FROM products WHERE productid = %s"
-        return sql
+        self.cursor.execute(sql,(product_id,))
+        data = self.cursor.fetchone()
+
+        return data
 
     def modify_product(self):
         """modify a product"""
@@ -62,5 +65,49 @@ class Products:
         sql="DELETE FROM products WHERE productid = %s"
 
         return sql
+
+    def get_product__by_name(self, product_name):
+        """get product name from db using product name"""
+
+        sql="SELECT * FROM products WHERE name = %s"
+        self.cursor.execute(sql,(product_name,))
+        data = self.cursor.fetchone()
+
+        return data
+
+    def get_product_price(self, product_name):
+        """get product price using product name"""
+
+        sql="SELECT * FROM products WHERE name = %s"
+        self.cursor.execute(sql,(product_name,))
+        data = self.cursor.fetchone()
+
+        return data[2]
+
+    def get_product_quantity(self, product_name):
+        """get product quantity using product name"""
+
+        sql="SELECT * FROM products WHERE name = %s"
+        self.cursor.execute(sql,(product_name,))
+        data = self.cursor.fetchone()
+
+        return data[3]
+
+
+    def get_product_min_quantity(self, product_name):
+        """get product min_quantity using product name"""
+
+        sql="SELECT * FROM products WHERE name = %s"
+        self.cursor.execute(sql,(product_name,))
+        data = self.cursor.fetchone()
+
+        return data[4]
+
+    def reduce_product_quantity(self, new_quantity,product_name):
+        """reduce product quantity after sale"""
+
+        sql="UPDATE products SET quantity = %s WHERE name = %s"
+        self.cursor.execute(sql,(new_quantity,product_name,))
+        self.connection.commit()   
 
 

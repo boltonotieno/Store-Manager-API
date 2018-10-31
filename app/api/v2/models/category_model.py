@@ -21,7 +21,7 @@ class Categories:
     def drop_table_category(self):
         """drop Table category"""
 
-        sql="""DROP TABLE category"""
+        sql="""DROP TABLE category CASCADE"""
         self.cursor.execute(sql)
         self.connection.commit()
 
@@ -39,11 +39,15 @@ class Categories:
         
         return sql
 
-    def get_one_category(self):
+    def get_one_category(self, category_id):
         """Fetch category by id"""
 
         sql="SELECT * FROM category WHERE categoryid = %s"
-        return sql
+        self.cursor.execute(sql,(category_id,))
+        data = self.cursor.fetchone()
+
+        return data
+
 
     def modify_category(self):
         """modify a category"""
@@ -58,5 +62,13 @@ class Categories:
         sql="DELETE FROM category WHERE categoryid = %s"
 
         return sql
+    
+    def get_category__by_name(self, category_name):
+        """get category name from db using category name"""
 
+        sql="SELECT * FROM category WHERE name = %s"
+        self.cursor.execute(sql,(category_name,))
+        data = self.cursor.fetchone()
+
+        return data
 

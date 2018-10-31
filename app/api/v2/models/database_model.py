@@ -23,7 +23,7 @@ class Database():
             price INTEGER NOT NULL,
             quantity INTEGER NOT NULL,
             min_quantity INTEGER NOT NULL,
-            category VARCHAR(15) NOT NULL
+            categoryid INTEGER REFERENCES category(categoryid) ON DELETE RESTRICT
             )"""
 
         query_sales="""CREATE TABLE IF NOT EXISTS sales(

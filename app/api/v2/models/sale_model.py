@@ -52,11 +52,13 @@ class Sales:
         sale = self.cursor.fetchall()
         return sale
 
-    def get_one_sale(self):
+    def get_one_sale(self, sale_id):
         """Fetch sale by id"""
 
         sql="SELECT saleid, name, price, quantity, attendant, price * quantity as total_amount FROM sales WHERE saleid = %s"
-        return sql
+        self.cursor.execute(sql,(sale_id,))
+        data = self.cursor.fetchone()
+        return data
 
     def modify_sales(self):
         """modify a sales"""
