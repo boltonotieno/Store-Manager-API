@@ -22,11 +22,11 @@ class Category(Resource):
         print(role)
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = parser.parse_args()
-        name = data['name'].lower()        
+        name = data['name']        
         if name.isalpha() == False:
             return{
                 'message' : 'Invalid category name {}'.format(name)
@@ -48,7 +48,8 @@ class Category(Resource):
                     'message' : 'Category created successfully',
                     'Category' : data_dict
                 },201
-        except:
+        except Exception as e:
+            print(e)
             return {'message' : 'Category {} already exist'.format(name)},409
 
     @jwt_required
@@ -94,16 +95,13 @@ class SingleCategory(Resource):
                     }        
 
         return {
-            'message' : 'Categories successfully retrieved',
+            'message' : 'Category successfully retrieved',
             'Category' : data_dict
         },200
 
     @jwt_required
     def put(self, category_id):
         """Modify one Category: only by the admin"""
-        if category_id.isdigit() == False:
-            return {'message' : 'Category id {} is invalid'.format(category_id)},400
-
         connection = db_connection()
         cursor = connection.cursor()
 
@@ -111,16 +109,18 @@ class SingleCategory(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
+        if category_id.isdigit() == False:
+            return {'message' : 'Category id {} is invalid'.format(category_id)},400
+
         data = parser.parse_args()
-        name = data['name'].lower()       
+        name = data['name']       
         if name.isalpha() == False:
             return{
                 'message' : 'Invalid category name {}'.format(name)
             },400
-
 
         try:
             put_category = Categories()
@@ -156,18 +156,18 @@ class SingleCategory(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403        
         
         try:
+            data = Categories().get_one_category(category_id)
+            if data is None:
+                return {'message' : 'Category id {} not Found'.format(category_id)},404
+
             del_category = Categories()
             sql = del_category.delete_category()
             cursor.execute(sql,(category_id,))
             connection.commit()
-
-            data = Categories().get_one_category(category_id)
-            if data is None:
-                return {'message' : 'Category id {} not Found'.format(category_id)},404
 
             return {
                 'message': 'Category id {} successfuly deleted'.format(category_id)

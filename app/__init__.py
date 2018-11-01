@@ -2,13 +2,14 @@ from flask import Flask, Blueprint
 from instance.config import app_config
 from flask_jwt_extended import JWTManager
 from .api.v2.models.user_model import Users
-from app.api.v2.models import create_tables
+from app.api.v2.models import create_tables, create_default_admin
 from app.api.v2.views.login_endpoint import TOKEN_BLACKLIST
 
 # Create the applicatiion
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
     create_tables()
+    create_default_admin()
     app.url_map.strict_slashes = False
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')

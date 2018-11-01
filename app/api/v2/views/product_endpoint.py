@@ -27,12 +27,12 @@ class Product(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = parser.parse_args()
-        name = data['name'].lower()
-        price = data['price'].lower()
+        name = data['name']
+        price = data['price']
         quantity = data['quantity']
         min_quantity = data['min_quantity']
         category_id = data['category_id']
@@ -139,7 +139,7 @@ class SingleProduct(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = parser.parse_args()
@@ -147,7 +147,7 @@ class SingleProduct(Resource):
         if Validation(data).validate_product():
             return Validation(data).validate_product()
 
-        name = data['name'].lower()
+        name = data['name']
         price = data['price']
         quantity = data['quantity']
         min_quantity = data['min_quantity']
@@ -161,7 +161,7 @@ class SingleProduct(Resource):
 
             data = Products().get_one_product(product_id)
             if data is None:
-                return {'message' : 'Product id {} not Found'.format(product_id)},404  
+                return {'message' : 'Product id {} not Found'.format(product_id)},404
 
             data_dict = {'id' : data[0],
                         'name' : data[1],
@@ -174,8 +174,9 @@ class SingleProduct(Resource):
                     'message' : 'Product id {} successfuly modified'.format(product_id),
                     'product' : data_dict
                 },200
-        except:
-            return {'message': 'Product {} already exist'.format(name)},409
+        except Exception as e:
+            print(e)
+            return {'message': 'Category id {} does not exist'.format(category_id)},404
 
     @jwt_required
     def delete(self, product_id):
@@ -191,7 +192,7 @@ class SingleProduct(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = Products().get_one_product(product_id)

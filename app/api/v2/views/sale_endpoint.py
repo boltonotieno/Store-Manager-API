@@ -40,26 +40,25 @@ class Sale(Resource):
         #checks if product exists
         existing_product = Products().get_product__by_name(name)
         if not existing_product:
-            return {'message' : 'Product does not exist'}
+            return {'message' : 'Product does not exist'},404
 
         product_price = Products().get_product_price(name)
         product_quantity = Products().get_product_quantity(name)
         product_min_quantity = Products().get_product_min_quantity(name)
         new_quantity = int(product_quantity) - int(quantity)
 
+
         #check if min_quantity  has been reached
         if product_quantity <= product_min_quantity:
             return {'message' : 'Product has reached the minimum quantity'}
 
+        #check if new quanity will below the min_quanity
+        if new_quantity < product_min_quantity:
+            return {'message' : 'Product quantity will go below the minimum quantity allowed'}
+
         #check if inventory quantity is not enough
         if int(quantity) > product_quantity:
             return {'message' : 'Product quantity is more than available  inventory quantity '}
-
-        print(name)
-        print (existing_product)
-        print (product_price)
-        print (product_quantity)
-        print (product_min_quantity)
 
         new_sales = Sales()
         sql = new_sales.create_sales()
@@ -68,7 +67,7 @@ class Sale(Resource):
 
         Products().reduce_product_quantity(new_quantity,name)
         return {
-               'message': 'Sales created successfully',
+                'message': 'Sales created successfully',
                 'attendant' : attendant
             },201
 
@@ -97,7 +96,7 @@ class Sale(Resource):
 
             return {
                 "message" : "Sales successfully retrieved",
-                'Sales' : data_dict
+                'Sales' : data_list
             },200
 
         sales = Sales()
@@ -150,7 +149,7 @@ class SingleSale(Resource):
 
         if role[0] != "admin" and current_user != creator[0]:
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin and creator of the sale"
             },403
 
         #fetch the sale
@@ -185,11 +184,11 @@ class SingleSale(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = parser.parse_args()
-        name = data['name'].lower()
+        name = data['name']
         quantity = data['quantity']
     
         #search for the product
@@ -241,7 +240,7 @@ class SingleSale(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         try:

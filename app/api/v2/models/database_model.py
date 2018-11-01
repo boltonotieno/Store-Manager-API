@@ -38,3 +38,16 @@ class Database():
         
         return self.query
 
+    def drop_query(self):
+            query_users="""DROP TABLE IF EXISTS users"""
+
+            query_category="""DROP TABLE IF EXISTS category CASCADE"""
+
+            query_products="""DROP TABLE IF EXISTS products"""
+
+            query_sales="""DROP TABLE IF EXISTS sales"""
+
+            self.query =[query_users,query_category,query_products,query_sales]
+            
+            return self.query
+
