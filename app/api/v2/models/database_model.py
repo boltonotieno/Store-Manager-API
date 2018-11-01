@@ -2,7 +2,7 @@
 class Database():
     """Database class"""
     def db_query(self):
-        query_users="""CREATE TABLE IF NOT EXISTS users(
+        query_users = """CREATE TABLE IF NOT EXISTS users(
             userid SERIAL PRIMARY KEY UNIQUE NOT NULL,
             name VARCHAR(50) NOT NULL,
             username VARCHAR(50) NOT NULL UNIQUE,
@@ -12,21 +12,22 @@ class Database():
             role VARCHAR(15) NOT NULL
             )"""
 
-        query_category="""CREATE TABLE IF NOT EXISTS category(
+        query_category = """CREATE TABLE IF NOT EXISTS category(
             categoryid SERIAL PRIMARY KEY UNIQUE NOT NULL,
             name VARCHAR(50) UNIQUE NOT NULL
             )"""
 
-        query_products="""CREATE TABLE IF NOT EXISTS products(
+        query_products = """CREATE TABLE IF NOT EXISTS products(
             productid SERIAL PRIMARY KEY UNIQUE NOT NULL,
             name VARCHAR(50) UNIQUE NOT NULL,
             price INTEGER NOT NULL,
             quantity INTEGER NOT NULL,
             min_quantity INTEGER NOT NULL,
-            categoryid INTEGER REFERENCES category(categoryid) ON DELETE RESTRICT
+            categoryid INTEGER REFERENCES category(categoryid)\
+            ON DELETE RESTRICT
             )"""
 
-        query_sales="""CREATE TABLE IF NOT EXISTS sales(
+        query_sales = """CREATE TABLE IF NOT EXISTS sales(
             saleid SERIAL PRIMARY KEY UNIQUE NOT NULL,
             name VARCHAR(50) NOT NULL,
             price INTEGER NOT NULL,
@@ -34,20 +35,20 @@ class Database():
             attendant VARCHAR(10) NOT NULL
             )"""
 
-        self.query =[query_users,query_category,query_products,query_sales]
-        
+        self.query = [query_users, query_category, query_products, query_sales] 
         return self.query
 
     def drop_query(self):
-            query_users="""DROP TABLE IF EXISTS users"""
+            query_users = """DROP TABLE IF EXISTS users"""
 
-            query_category="""DROP TABLE IF EXISTS category CASCADE"""
+            query_category = """DROP TABLE IF EXISTS category CASCADE"""
 
-            query_products="""DROP TABLE IF EXISTS products"""
+            query_products = """DROP TABLE IF EXISTS products"""
 
-            query_sales="""DROP TABLE IF EXISTS sales"""
+            query_sales = """DROP TABLE IF EXISTS sales"""
 
-            self.query =[query_users,query_category,query_products,query_sales]
-            
+            self.query = [query_users, query_category,
+                          query_products, query_sales]
+
             return self.query
 
