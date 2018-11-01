@@ -101,9 +101,6 @@ class SingleCategory(Resource):
     @jwt_required
     def put(self, category_id):
         """Modify one Category: only by the admin"""
-        if category_id.isdigit() == False:
-            return {'message' : 'Category id {} is invalid'.format(category_id)},400
-
         connection = db_connection()
         cursor = connection.cursor()
 
@@ -114,13 +111,15 @@ class SingleCategory(Resource):
                 "message" : "Access not allowed"
             },403
 
+        if category_id.isdigit() == False:
+            return {'message' : 'Category id {} is invalid'.format(category_id)},400
+
         data = parser.parse_args()
         name = data['name'].lower()       
         if name.isalpha() == False:
             return{
                 'message' : 'Invalid category name {}'.format(name)
             },400
-
 
         try:
             put_category = Categories()

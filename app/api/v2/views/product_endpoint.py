@@ -174,8 +174,9 @@ class SingleProduct(Resource):
                     'message' : 'Product id {} successfuly modified'.format(product_id),
                     'product' : data_dict
                 },200
-        except:
-            return {'message': 'Product {} already exist'.format(name)},409
+        except Exception as e:
+            print(e)
+            return {'message': 'Category id does not exist'},409
 
     @jwt_required
     def delete(self, product_id):

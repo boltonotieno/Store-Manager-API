@@ -17,7 +17,7 @@ class Products:
         price INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
         min_quantity INTEGER NOT NULL,
-        categoryid INTEGER REFERENCES category(categoryid) ON DELETE RESTRICT
+        categoryid INTEGER REFERENCES category(categoryid)
         )"""
         self.cursor.execute(sql)
         self.connection.commit()
@@ -25,7 +25,7 @@ class Products:
     def drop_table_products(self):
         """drop Table products"""
 
-        sql="""DROP TABLE products CASCADE"""
+        sql="""DROP TABLE products"""
         self.cursor.execute(sql)
         self.connection.commit()
 
