@@ -29,7 +29,7 @@ class TestSales(unittest.TestCase):
             self.db_sale.create_table_sales()
 
         self.data = {
-            'name' : 'Pilsner',
+            'name' : 'pilsner',
             'quantity' : '5'
         }
 
@@ -47,7 +47,7 @@ class TestSales(unittest.TestCase):
         }
 
         self.data_prod = {
-            'name' : 'Pilsner',
+            'name' : 'pilsner',
             'price' : '200',
             'quantity' : '20',
             'min_quantity' : '5',
@@ -81,7 +81,7 @@ class TestSales(unittest.TestCase):
         #admin post category
         response = self.client.post('/api/v2/category',
         headers = dict(Authorization='Bearer '+token),
-        data= json.dumps(self.data),
+        data= json.dumps({'name' : 'beer'}),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
@@ -211,7 +211,7 @@ class TestSales(unittest.TestCase):
         response_modify = self.client.put('/api/v2/sales/1',
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps({
-            'name' : 'Pilsner',
+            'name' : 'pilsner',
             'quantity' : '10'
             }),
         content_type='application/json')

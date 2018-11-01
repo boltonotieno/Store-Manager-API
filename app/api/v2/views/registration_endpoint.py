@@ -35,9 +35,9 @@ class Registration(Resource):
             },403       
 
         data = parser.parse_args()
-        name = data['name'].lower()
-        username = data['username'].lower()
-        email = data['email'].lower()
+        name = data['name']
+        username = data['username']
+        email = data['email']
         password = data['password']
         gender = data['gender'].lower()
         role = data['role'].lower()

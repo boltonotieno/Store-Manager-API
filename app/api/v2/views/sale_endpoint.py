@@ -67,7 +67,7 @@ class Sale(Resource):
 
         Products().reduce_product_quantity(new_quantity,name)
         return {
-               'message': 'Sales created successfully',
+                'message': 'Sales created successfully',
                 'attendant' : attendant
             },201
 
@@ -188,7 +188,7 @@ class SingleSale(Resource):
             },403
 
         data = parser.parse_args()
-        name = data['name'].lower()
+        name = data['name']
         quantity = data['quantity']
     
         #search for the product

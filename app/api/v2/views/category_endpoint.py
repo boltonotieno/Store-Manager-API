@@ -26,7 +26,7 @@ class Category(Resource):
             },403
 
         data = parser.parse_args()
-        name = data['name'].lower()        
+        name = data['name']        
         if name.isalpha() == False:
             return{
                 'message' : 'Invalid category name {}'.format(name)
@@ -48,7 +48,8 @@ class Category(Resource):
                     'message' : 'Category created successfully',
                     'Category' : data_dict
                 },201
-        except:
+        except Exception as e:
+            print(e)
             return {'message' : 'Category {} already exist'.format(name)},409
 
     @jwt_required
@@ -115,7 +116,7 @@ class SingleCategory(Resource):
             return {'message' : 'Category id {} is invalid'.format(category_id)},400
 
         data = parser.parse_args()
-        name = data['name'].lower()       
+        name = data['name']       
         if name.isalpha() == False:
             return{
                 'message' : 'Invalid category name {}'.format(name)

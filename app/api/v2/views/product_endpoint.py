@@ -31,8 +31,8 @@ class Product(Resource):
             },403
 
         data = parser.parse_args()
-        name = data['name'].lower()
-        price = data['price'].lower()
+        name = data['name']
+        price = data['price']
         quantity = data['quantity']
         min_quantity = data['min_quantity']
         category_id = data['category_id']
@@ -147,7 +147,7 @@ class SingleProduct(Resource):
         if Validation(data).validate_product():
             return Validation(data).validate_product()
 
-        name = data['name'].lower()
+        name = data['name']
         price = data['price']
         quantity = data['quantity']
         min_quantity = data['min_quantity']
