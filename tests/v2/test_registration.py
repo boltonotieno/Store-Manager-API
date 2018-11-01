@@ -1,5 +1,4 @@
 import unittest
-import os
 import json
 from app import create_app
 from app.api.v2.models.user_model import Users
@@ -18,18 +17,33 @@ class TestRegistration(unittest.TestCase):
             # create all tables
             db = Users()
             db.create_table_user()
+
         self.data = {
-            'name' : 'Jane Doe',
-            'username' : 'jdoe',
-            'email' : 'jdoe@gmail.com',
-            'password' : 'jdoepass',
-            'gender' : 'female',
+            'name': 'Jane Doe',
+            'username': 'jdoe',
+            'email': 'jdoe@gmail.com',
+            'password': 'jdoepass',
+            'gender': 'female',
             'role': 'admin'
         }
-        
+        self.data_login = {
+            'username': 'admin',
+            'password': 'adminpass'
+        }
+
     def test_registration(self):
         """Test registration of new users"""
-        response = self.client.post('/api/v2/auth/signup', 
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
+        response = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data),
         content_type='application/json')
         
@@ -39,7 +53,17 @@ class TestRegistration(unittest.TestCase):
 
     def test_empty_fields(self):
         """Test registration with missing username"""
-        response = self.client.post('/api/v2/auth/signup', 
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        # user signup
+        response = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token),
         data= json.dumps({
             'name' : 'Jane Doe',
             'email' : 'jdoe@gmail.com',
@@ -54,7 +78,17 @@ class TestRegistration(unittest.TestCase):
 
     def test_invalid_email(self):
         """Test registration with invalid email"""
-        response = self.client.post('/api/v2/auth/signup', 
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        # user signup
+        response = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps({
             'name' : 'Jane Doe',
             'username' : 'jdoe',
@@ -70,24 +104,46 @@ class TestRegistration(unittest.TestCase):
     
     def test_get_all_users(self):
         """Test if API can GET all users"""
-        response = self.client.post('/api/v2/auth/signup', 
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+        
+        # user signup
+        response = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data),
         content_type='application/json')        
     
-        response= self.client.get('/api/v2/users')
+        response= self.client.get('/api/v2/users',
+        headers = dict(Authorization='Bearer '+token))
         result = json.loads(response.data)
-        self.assertEqual(result['message'], 'success')
+        self.assertEqual(result['message'], 'Users successfully retrieved')
         self.assertEqual(response.status_code, 200)
 
     def test_get_user_by_id(self):
         """Test if API can GET single user by id"""
-        response = self.client.post('/api/v2/auth/signup', 
+
+        #user login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        token = result_login['access_token']
+
+        # user signup
+        response = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data),
         content_type='application/json')        
 
-        response = self.client.get('/api/v2/users/1')
+        response = self.client.get('/api/v2/users/2',
+        headers = dict(Authorization='Bearer '+token))
         result = json.loads(response.data)
-        self.assertEqual(result['message'], 'success')
+        self.assertEqual(result['message'], 'User successfully retrieved')
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):

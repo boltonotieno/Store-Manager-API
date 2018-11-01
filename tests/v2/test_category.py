@@ -38,11 +38,25 @@ class TestCategory(unittest.TestCase):
             'password' : 'jdoepass'
         }
 
+        self.data_login2 = {
+            'username' : 'admin',
+            'password' : 'adminpass'
+        }
+
     def test_post_category(self):
         """Test if API can POST new product category"""
 
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login2),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
         #register user
-        response_reg = self.client.post('/api/v2/auth/signup', 
+        response_reg = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data_reg),
         content_type='application/json')
 
@@ -51,6 +65,7 @@ class TestCategory(unittest.TestCase):
         data= json.dumps(self.data_login),
         content_type='application/json')
         result_login = json.loads(response_login.data)
+        print(result_login)
         token = result_login['access_token']
 
         #user post category
@@ -66,8 +81,17 @@ class TestCategory(unittest.TestCase):
     def test_get_all_category(self):
         """Test if API can GET all category"""
 
-         #register user
-        response_reg = self.client.post('/api/v2/auth/signup', 
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login2),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data_reg),
         content_type='application/json')
 
@@ -89,14 +113,23 @@ class TestCategory(unittest.TestCase):
         response= self.client.get('/api/v2/category',
         headers = dict(Authorization='Bearer '+token))
         result_get = json.loads(response.data)
-        self.assertEqual(result_get['message'], 'success')
+        self.assertEqual(result_get['message'], 'Categories successfully retrieved')
         self.assertEqual(response.status_code, 200)
 
     def test_get_category_by_id(self):
         """Test if API can GET single category by id"""
 
-         #register user
-        response_reg = self.client.post('/api/v2/auth/signup', 
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login2),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
+        #register user
+        response_reg = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data_reg),
         content_type='application/json')
 
@@ -118,14 +151,23 @@ class TestCategory(unittest.TestCase):
         response = self.client.get('/api/v2/category/1',
         headers = dict(Authorization='Bearer '+token))
         result_get_one = json.loads(response.data)
-        self.assertEqual(result_get_one['message'], 'success')
+        self.assertEqual(result_get_one['message'], 'Category successfully retrieved')
         self.assertEqual(response.status_code, 200)
 
     def test_modify_category(self):
         """Test if API can modify(PUT) a single category"""
         
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login2),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
         #register user
-        response_reg = self.client.post('/api/v2/auth/signup', 
+        response_reg = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data_reg),
         content_type='application/json')
 
@@ -149,14 +191,23 @@ class TestCategory(unittest.TestCase):
         data= json.dumps({'name' : 'spirit'}),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'successfuly modified')
+        self.assertEqual(result_modify_one['message'], 'Category id 1 successfuly modified')
         self.assertEqual(response_modify.status_code, 200)
 
     def test_delete_category(self):
         """Test if API can DELETE  a single category"""
 
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login2),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
         #register user
-        response_reg = self.client.post('/api/v2/auth/signup', 
+        response_reg = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token), 
         data= json.dumps(self.data_reg),
         content_type='application/json')
 
@@ -174,18 +225,25 @@ class TestCategory(unittest.TestCase):
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
+        #user get one category
+        response = self.client.get('/api/v2/category/1',
+        headers = dict(Authorization='Bearer '+token))
+        result_get_one = json.loads(response.data)
+        self.assertEqual(result_get_one['message'], 'Category successfully retrieved')
+        self.assertEqual(response.status_code, 200)
+
         #user delete category
         response_delete = self.client.delete('/api/v2/category/1',
         headers = dict(Authorization='Bearer '+token))      
         result_delete_one = json.loads(response_delete.data)
-        self.assertEqual(result_delete_one['message'], 'successfuly deleted')
+        self.assertEqual(result_delete_one['message'], 'Category id 1 successfuly deleted')
         self.assertEqual(response_delete.status_code, 200)
 
         #Test if the category has been actually deleted by trying to GET it
         response_get = self.client.get('/api/v2/category/1',
         headers = dict(Authorization='Bearer '+token))
         result_get = json.loads(response_get.data)
-        self.assertEqual(result_get['message'], 'Category not Found')
+        self.assertEqual(result_get['message'], 'Category id 1 not Found')
 
 
     def tearDown(self):

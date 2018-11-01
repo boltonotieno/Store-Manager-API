@@ -94,7 +94,7 @@ class SingleCategory(Resource):
                     }        
 
         return {
-            'message' : 'Categories successfully retrieved',
+            'message' : 'Category successfully retrieved',
             'Category' : data_dict
         },200
 
@@ -160,14 +160,14 @@ class SingleCategory(Resource):
             },403        
         
         try:
+            data = Categories().get_one_category(category_id)
+            if data is None:
+                return {'message' : 'Category id {} not Found'.format(category_id)},404
+
             del_category = Categories()
             sql = del_category.delete_category()
             cursor.execute(sql,(category_id,))
             connection.commit()
-
-            data = Categories().get_one_category(category_id)
-            if data is None:
-                return {'message' : 'Category id {} not Found'.format(category_id)},404
 
             return {
                 'message': 'Category id {} successfuly deleted'.format(category_id)

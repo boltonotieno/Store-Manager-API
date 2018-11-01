@@ -33,10 +33,24 @@ class TestLogin(unittest.TestCase):
             'password' : 'jdoepass'
         }
 
+        self.data_login = {
+            'username' : 'admin',
+            'password' : 'adminpass'
+        }
+
     def test_login(self):
         """Test login of users"""  
 
-        response = self.client.post('/api/v2/auth/signup', 
+        #admin login
+        response_login = self.client.post('/api/v2/auth/login', 
+        data= json.dumps(self.data_login),
+        content_type='application/json')
+        result_login = json.loads(response_login.data)
+        print(result_login)
+        token = result_login['access_token']
+
+        response = self.client.post('/api/v2/auth/signup',
+        headers = dict(Authorization='Bearer '+token),
         data= json.dumps(self.data),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
