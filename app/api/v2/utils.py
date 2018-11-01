@@ -44,4 +44,12 @@ class Validation:
 
             if self.data['role'] != 'admin' and self.data['role'] != 'attendant':
                 return {'message' : 'Role should  either be admin or attendant'},400
+
+    def validate_role(self):
+
+            if self.data['role'].isalpha() == False:
+                return {'message' : 'Invalid user role'},400
+
+            if self.data['role'] != 'admin' and self.data['role'] != 'attendant':
+                return {'message' : 'Role should  either be admin or attendant'},400
                 

@@ -27,7 +27,7 @@ class Product(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = parser.parse_args()
@@ -139,7 +139,7 @@ class SingleProduct(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = parser.parse_args()
@@ -161,7 +161,7 @@ class SingleProduct(Resource):
 
             data = Products().get_one_product(product_id)
             if data is None:
-                return {'message' : 'Product id {} not Found'.format(product_id)},404  
+                return {'message' : 'Product id {} not Found'.format(product_id)},404
 
             data_dict = {'id' : data[0],
                         'name' : data[1],
@@ -176,7 +176,7 @@ class SingleProduct(Resource):
                 },200
         except Exception as e:
             print(e)
-            return {'message': 'Category id does not exist'},409
+            return {'message': 'Category id {} does not exist'.format(category_id)},404
 
     @jwt_required
     def delete(self, product_id):
@@ -192,7 +192,7 @@ class SingleProduct(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = Products().get_one_product(product_id)

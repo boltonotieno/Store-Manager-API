@@ -55,7 +55,7 @@ class Products:
     def modify_product(self):
         """modify a product"""
 
-        sql="UPDATE products SET name = %s, price = %s, quantity = %s, min_quantity = %s, category = %s WHERE productid = %s"
+        sql="UPDATE products SET name = %s, price = %s, quantity = %s, min_quantity = %s, categoryid = %s WHERE productid = %s"
         
         return sql
 

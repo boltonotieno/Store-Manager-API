@@ -3,10 +3,11 @@ import os
 import json
 from app import create_app
 from app.api.v2.models.user_model import Users
+from app.api.v2.models import create_tables, create_default_admin, drop_tables
 
 class TestLogin(unittest.TestCase):
     """Authentication TestCases Class"""
-
+    drop_tables()
     def setUp(self):
         """ Define tests variables"""
         self.app = create_app(config_name='testing')
@@ -76,6 +77,5 @@ class TestLogin(unittest.TestCase):
     def tearDown(self):
         """Removes all initialised variables"""
         self.app_context.pop()
-        db = Users()
-        db.drop_table_user()
+
       

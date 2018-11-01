@@ -22,7 +22,7 @@ class Category(Resource):
         print(role)
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         data = parser.parse_args()
@@ -108,7 +108,7 @@ class SingleCategory(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403
 
         if category_id.isdigit() == False:
@@ -155,7 +155,7 @@ class SingleCategory(Resource):
 
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403        
         
         try:

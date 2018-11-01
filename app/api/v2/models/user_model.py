@@ -63,6 +63,15 @@ class Users:
 
         sql="SELECT password FROM users WHERE username = %s"
         return sql
+    
+    def get_username(self):
+        current_user = get_jwt_identity()
+        sql="SELECT role FROM users WHERE username = %s"
+        self.cursor.execute(sql,(current_user,))
+        role = self.cursor.fetchone()
+        return role
+        
+
 
     def get_user_role(self):
         """Fetch user role"""
@@ -72,4 +81,11 @@ class Users:
         role = self.cursor.fetchone()
         return role
 
+    def modify_user_role(self,new_role,user_id):
+        """modify a user role"""
+
+        sql="UPDATE users SET role = %s WHERE userid = %s"
+        self.cursor.execute(sql,(new_role,user_id))
+        self.connection.commit()
+    
 

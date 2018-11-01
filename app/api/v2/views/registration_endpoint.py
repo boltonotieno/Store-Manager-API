@@ -17,6 +17,10 @@ parser.add_argument('password', help = 'This field cannot be blank', required = 
 parser.add_argument('gender', help = 'This field cannot be blank', required = True)
 parser.add_argument('role', help = 'This field cannot be blank', required = True)
 
+#passing incoming data into put requests
+parser_put = reqparse.RequestParser()
+parser_put.add_argument('role', help = 'This field cannot be blank', required = True)
+
 class Registration(Resource):
     @jwt_required
     def post(self):
@@ -27,7 +31,7 @@ class Registration(Resource):
         role = Users().get_user_role()
         if role[0] != "admin":
             return {
-                "message" : "Access not allowed"
+                "message" : "Access allowed only to admin"
             },403       
 
         data = parser.parse_args()
@@ -74,7 +78,8 @@ class Registration(Resource):
                 },201
 
         except Exception as error:
-            return str(error)
+            print(error)
+            return {'message' : 'User exist with the same username/email'}
 
     @jwt_required
     def get(self):
@@ -82,6 +87,13 @@ class Registration(Resource):
 
         connection = db_connection()
         cursor = connection.cursor()
+
+        role = Users().get_user_role()
+
+        if role[0] != "admin":
+            return {
+                "message" : "Access allowed only to admin"
+            },403
 
         users = Users()
         sql = users.get_all_users()
@@ -119,6 +131,13 @@ class User(Resource):
         connection = db_connection()
         cursor = connection.cursor()
 
+        role = Users().get_user_role()
+
+        if role[0] != "admin":
+            return {
+                "message" : "Access allowed only to admin"
+            },403
+            
         users = Users()
         sql = users.get_one_user()
         cursor.execute(sql,(user_id,))
@@ -140,3 +159,66 @@ class User(Resource):
             'User' : data_dict
         },200
 
+
+    @jwt_required
+    def put(self, user_id):
+        """Change user role: only by the admin"""
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        current_role = Users().get_user_role()
+
+        if current_role[0] != "admin":
+            return {
+                "message" : "Access allowed only to admin"
+            },403
+
+        if user_id.isdigit() == False:
+            return {'message' : 'User id {} is invalid'.format(user_id)},400
+
+
+        users = Users()
+        sql = users.get_one_user()
+        cursor.execute(sql,(user_id,))
+        user_data = cursor.fetchone()
+
+        if user_data is None:
+            return {'message' : 'User id {} not Found'.format(user_id)}
+
+
+        if user_data[2] == 'admin':
+            return {'message' : 'Default admin cant be modified'},403
+
+        data = parser_put.parse_args()
+        role = data['role'].lower()
+
+        if Validation(data).validate_role():
+            return Validation(data).validate_role()
+
+        if user_data[6] == 'admin' and role == 'admin' :
+            return{
+                'message' : 'User {} is already an admin'.format(user_data[2])
+            },400
+
+        if user_data[6] == 'attendant' and role == 'attendant':
+            return{
+                'message' : 'User {} is already an attendant'.format(user_data[2])
+            },400
+    
+        Users().modify_user_role(role,user_id)
+        users = Users()
+        sql = users.get_one_user()
+        cursor.execute(sql,(user_id,))
+        data = cursor.fetchone()
+        data_dict = {'id' : data[0],
+                    'name' : data[1],
+                    'username' : data[2],
+                    'email' : data[3],
+                    'pasword' : data[4],
+                    'gender' : data[5],
+                    'role' : data[6]
+                    }
+        return {
+                'message': 'User {} change role to {} succesfully'.format(data[1],role),
+                'User' : data_dict
+                },200

@@ -4,10 +4,11 @@ import json
 from app import create_app
 from app.api.v2.models.user_model import Users
 from app.api.v2.models.category_model import Categories
+from app.api.v2.models import create_tables, create_default_admin, drop_tables
 
 class TestCategory(unittest.TestCase):
     """category TestCases Class"""
-
+    drop_tables()
     def setUp(self):
         """ Define test variables"""
         self.app = create_app(config_name='testing')
@@ -21,21 +22,10 @@ class TestCategory(unittest.TestCase):
             db_category = Categories()
             db_user.create_table_user()
             db_category.create_table_category()
+            create_default_admin()
 
         self.data = {
             'name' : 'beer'
-        }
-        self.data_reg = {
-            'name' : 'Jane Doe',
-            'username' : 'jdoe',
-            'email' : 'jdoe@gmail.com',
-            'password' : 'jdoepass',
-            'gender' : 'female',
-            'role': 'admin'
-        }
-        self.data_login = {
-            'username' : 'jdoe',
-            'password' : 'jdoepass'
         }
 
         self.data_login2 = {
@@ -49,20 +39,6 @@ class TestCategory(unittest.TestCase):
         #admin login
         response_login = self.client.post('/api/v2/auth/login', 
         data= json.dumps(self.data_login2),
-        content_type='application/json')
-        result_login = json.loads(response_login.data)
-        print(result_login)
-        token = result_login['access_token']
-
-        #register user
-        response_reg = self.client.post('/api/v2/auth/signup',
-        headers = dict(Authorization='Bearer '+token), 
-        data= json.dumps(self.data_reg),
-        content_type='application/json')
-
-        #user login
-        response_login = self.client.post('/api/v2/auth/login', 
-        data= json.dumps(self.data_login),
         content_type='application/json')
         result_login = json.loads(response_login.data)
         print(result_login)
@@ -87,19 +63,6 @@ class TestCategory(unittest.TestCase):
         content_type='application/json')
         result_login = json.loads(response_login.data)
         print(result_login)
-        token = result_login['access_token']
-
-        #register user
-        response_reg = self.client.post('/api/v2/auth/signup',
-        headers = dict(Authorization='Bearer '+token), 
-        data= json.dumps(self.data_reg),
-        content_type='application/json')
-
-        #user login
-        response_login = self.client.post('/api/v2/auth/login', 
-        data= json.dumps(self.data_login),
-        content_type='application/json')
-        result_login = json.loads(response_login.data)
         token = result_login['access_token']
 
         #user post category
@@ -127,28 +90,15 @@ class TestCategory(unittest.TestCase):
         print(result_login)
         token = result_login['access_token']
 
-        #register user
-        response_reg = self.client.post('/api/v2/auth/signup',
-        headers = dict(Authorization='Bearer '+token), 
-        data= json.dumps(self.data_reg),
-        content_type='application/json')
-
-        #user login
-        response_login = self.client.post('/api/v2/auth/login', 
-        data= json.dumps(self.data_login),
-        content_type='application/json')
-        result_login = json.loads(response_login.data)
-        token = result_login['access_token']
-
         #user post category
         response = self.client.post('/api/v2/category',
         headers = dict(Authorization='Bearer '+token),
-        data= json.dumps(self.data),
+        data= json.dumps({'name' : 'wine'}),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         #user get one category
-        response = self.client.get('/api/v2/category/1',
+        response = self.client.get('/api/v2/category/2',
         headers = dict(Authorization='Bearer '+token))
         result_get_one = json.loads(response.data)
         self.assertEqual(result_get_one['message'], 'Category successfully retrieved')
@@ -165,33 +115,13 @@ class TestCategory(unittest.TestCase):
         print(result_login)
         token = result_login['access_token']
 
-        #register user
-        response_reg = self.client.post('/api/v2/auth/signup',
-        headers = dict(Authorization='Bearer '+token), 
-        data= json.dumps(self.data_reg),
-        content_type='application/json')
-
-        #user login
-        response_login = self.client.post('/api/v2/auth/login', 
-        data= json.dumps(self.data_login),
-        content_type='application/json')
-        result_login = json.loads(response_login.data)
-        token = result_login['access_token']
-
-        #user post category
-        response = self.client.post('/api/v2/category',
-        headers = dict(Authorization='Bearer '+token),
-        data= json.dumps(self.data),
-        content_type='application/json')
-        self.assertEqual(response.status_code, 201)
-
         #user modify category
-        response_modify = self.client.put('/api/v2/category/1',
+        response_modify = self.client.put('/api/v2/category/2',
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps({'name' : 'spirit'}),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'Category id 1 successfuly modified')
+        self.assertEqual(result_modify_one['message'], 'Category id 2 successfuly modified')
         self.assertEqual(response_modify.status_code, 200)
 
     def test_delete_category(self):
@@ -203,19 +133,6 @@ class TestCategory(unittest.TestCase):
         content_type='application/json')
         result_login = json.loads(response_login.data)
         print(result_login)
-        token = result_login['access_token']
-
-        #register user
-        response_reg = self.client.post('/api/v2/auth/signup',
-        headers = dict(Authorization='Bearer '+token), 
-        data= json.dumps(self.data_reg),
-        content_type='application/json')
-
-        #user login
-        response_login = self.client.post('/api/v2/auth/login', 
-        data= json.dumps(self.data_login),
-        content_type='application/json')
-        result_login = json.loads(response_login.data)
         token = result_login['access_token']
 
         #user post category
@@ -245,14 +162,9 @@ class TestCategory(unittest.TestCase):
         result_get = json.loads(response_get.data)
         self.assertEqual(result_get['message'], 'Category id 1 not Found')
 
-
     def tearDown(self):
         """Removes all initialised variables"""
         self.app_context.pop()
-        db_user = Users()
-        db_category= Categories()
-        db_user.drop_table_user()
-        db_category.drop_table_category()
 
 if __name__=='__main__':
     unittest.main()

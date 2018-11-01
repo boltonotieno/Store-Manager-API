@@ -22,6 +22,7 @@ class TestProducts(unittest.TestCase):
         self.db_product= Products()
         with self.app.app_context():
             # create all tables
+            self.db_users.create_table_user()
             self.db_category.create_table_category()
             self.db_product.create_table_products()
             create_default_admin()
@@ -160,7 +161,7 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
         #user modify product
-        response_modify = self.client.put('/api/v2/products/2',
+        response_modify = self.client.put('/api/v2/products/3',
         headers = dict(Authorization='Bearer '+token),
         data= json.dumps({
             'name' : 'Kibao',
@@ -171,12 +172,16 @@ class TestProducts(unittest.TestCase):
             }),
         content_type='application/json')
         result_modify_one = json.loads(response_modify.data)
-        self.assertEqual(result_modify_one['message'], 'successfuly modified')
+        self.assertEqual(result_modify_one['message'], 'Product id 3 successfuly modified')
         self.assertEqual(response_modify.status_code, 200)
 
     def test_delete_product(self):
         """Test if API can DELETE  a single product"""
-
+        drop_tables()
+        self.db_users.create_table_user()
+        self.db_category.create_table_category()
+        self.db_product.create_table_products()
+        create_default_admin()
         #admin login
         response_login = self.client.post('/api/v2/auth/login', 
         data= json.dumps(self.data_login),
@@ -207,18 +212,8 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(response_delete.status_code, 200)
 
     def tearDown(self):
-        """Removes all initialised variables"""
-        # with self.app.app_context():
-                # db_product= Products()
-                # db_category= Categories()
-                # self.db_product.drop_table_products()
-                # self.db_category.drop_table_category()
-        
+        """Removes all initialised variables"""        
         self.app_context.pop()
-        # drop_tables()
-        # db_product= Products()
-        # db_category= Categories()
-        # db_category.drop_table_category()
-        # db_product.drop_table_products()
+
         
 
