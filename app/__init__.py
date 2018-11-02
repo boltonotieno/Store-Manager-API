@@ -5,6 +5,7 @@ from .api.v2.models.user_model import Users
 from app.api.v2.models import create_tables, create_default_admin
 from app.api.v2.views.login_endpoint import TOKEN_BLACKLIST
 
+
 # Create the applicatiion
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
@@ -18,7 +19,7 @@ def create_app(config_name):
     app.config['JWT_BLACKLIST_ENABLED'] = True
     app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
 
-    jwt=JWTManager(app)
+    jwt = JWTManager(app)
 
     @jwt.token_in_blacklist_loader
     def check_if_token_blacklist(decrypted_token):

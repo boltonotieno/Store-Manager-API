@@ -90,4 +90,11 @@ class Users:
         sql = "UPDATE users SET role = %s WHERE userid = %s"
         self.cursor.execute(sql, (new_role, user_id))
         self.connection.commit()
+
+    def delete_user(self):
+        """delete single user by id"""
+
+        sql = "DELETE FROM users WHERE userid = %s"
+        return sql
+
         

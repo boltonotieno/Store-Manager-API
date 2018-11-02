@@ -37,7 +37,7 @@ class Registration(Resource):
         if role[0] != "admin":
             return {
                 "message": "Access allowed only to admin"
-            }, 403       
+            }, 403
 
         data = parser.parse_args()
         name = data['name']
@@ -85,7 +85,7 @@ class Registration(Resource):
 
         except Exception as error:
             print(error)
-            return {'message': 'User exist with the same username/email'}
+            return {'message': 'User exist with the same username/email'}, 403
 
     @jwt_required
     def get(self):
@@ -231,3 +231,44 @@ class User(Resource):
                 .format(data[1], role),
                 'User': data_dict
                 }, 200
+
+    @jwt_required
+    def delete(self, user_id):
+        """delete one user: only by the admin"""
+
+        if user_id.isdigit() is False:
+            return {'message': 'User id {} is invalid'
+                    .format(user_id)}, 400
+
+        connection = db_connection()
+        cursor = connection.cursor()
+
+        role = Users().get_user_role()
+
+        if role[0] != "admin":
+            return {
+                "message": "Access allowed only to admin"
+            }, 403
+
+        users = Users()
+        sql = users.get_one_user()
+        cursor.execute(sql, (user_id,))
+        user_data = cursor.fetchone()
+
+        if user_data is None:
+            return {'message': 'User id {} not Found'.format(user_id)}
+
+        if user_data[2] == 'admin':
+            return {'message': 'Default admin cant be deleted'}, 403
+
+        delete_user = Users()
+        sql = delete_user.delete_user()
+        cursor.execute(sql, (user_id,))
+        connection.commit()
+
+        return {
+            'message': 'User id {} successfuly deleted'
+            .format(user_id)
+        }, 200
+
+       
