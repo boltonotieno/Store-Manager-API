@@ -31,6 +31,7 @@ records.
 | DELETE     | /api/v2/auth/logout        | Logout a user      |
 | GET     | /api/v2/users        | Gets all users     |
 | GET     | /api/v2/users/user_id      |Gets a single user by id      |
+| PUT     | /api/v2/users        | Change User role      |
 | POST     | /api/v2/products        | Add a product      |
 | POST     | /api/v2/sales        | Add a sales record      |
 | POST     | /api/v2/category       | Add category     |
@@ -80,3 +81,18 @@ python run.py
 Using pytest . The tests are in app/api/test/v1
 ```
 pytest -v
+
+```
+### Demployment
+Using Heroku
+
+```
+https://my-store-manager-api-v2.herokuapp.com
+````
+
+### Documentation
+Using Apiary
+
+```
+https://storemanager8.docs.apiary.io/#
+```
