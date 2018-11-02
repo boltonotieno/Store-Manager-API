@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, jsonify
 from instance.config import app_config
 from flask_jwt_extended import JWTManager
 from .api.v2.models.user_model import Users
@@ -26,6 +26,12 @@ def create_app(config_name):
         """checks if jti(unique identifier) is in the token blacklist set"""
         jti = decrypted_token['jti']
         return jti in TOKEN_BLACKLIST
+
+    @app.errorhandler(Exception)
+    def server_exceptions(e):
+        return jsonify({
+            'message': 'Internal Server Error, Contact system Administrator'
+            }), 500
 
     # register Blueprint
     from .api.v1 import version1 as v1
