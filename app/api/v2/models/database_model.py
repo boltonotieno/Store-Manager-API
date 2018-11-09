@@ -5,8 +5,8 @@ class Database():
         query_users = """CREATE TABLE IF NOT EXISTS users(
             userid SERIAL PRIMARY KEY UNIQUE NOT NULL,
             name VARCHAR(50) NOT NULL,
-            username VARCHAR(50) NOT NULL UNIQUE,
-            email VARCHAR(150) NOT NULL UNIQUE,
+            username citext NOT NULL UNIQUE,
+            email citext NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             gender VARCHAR(15) NOT NULL,
             role VARCHAR(15) NOT NULL
@@ -14,12 +14,12 @@ class Database():
 
         query_category = """CREATE TABLE IF NOT EXISTS category(
             categoryid SERIAL PRIMARY KEY UNIQUE NOT NULL,
-            name VARCHAR(50) UNIQUE NOT NULL
+            name citext UNIQUE NOT NULL
             )"""
 
         query_products = """CREATE TABLE IF NOT EXISTS products(
             productid SERIAL PRIMARY KEY UNIQUE NOT NULL,
-            name VARCHAR(50) UNIQUE NOT NULL,
+            name citext UNIQUE NOT NULL,
             price INTEGER NOT NULL,
             quantity INTEGER NOT NULL,
             min_quantity INTEGER NOT NULL,
