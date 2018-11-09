@@ -2,7 +2,7 @@
 class Database():
     """Database class"""
     def db_query(self):
-        query_citext = 'CREATE EXTENSION citext;'
+        query_citext = 'CREATE EXTENSION IF NOT EXISTS citext;'
 
         query_users = """CREATE TABLE IF NOT EXISTS users(
             userid SERIAL PRIMARY KEY UNIQUE NOT NULL,
