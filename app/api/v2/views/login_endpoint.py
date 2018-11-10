@@ -41,9 +41,12 @@ class Login(Resource):
             expire_time = datetime.timedelta(minutes=30)
             access_token = create_access_token(identity=username,
                                                expires_delta=expire_time)
+            role = Users().get_role(username)
+            
             return {
                     'message': 'Logged in succesful as {}'.format(username),
-                    'access_token': access_token
+                    'access_token': access_token,
+                    'role': role[0]
              }
         return {'message': 'Invalid password'}
 

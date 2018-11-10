@@ -84,6 +84,14 @@ class Users:
         role = self.cursor.fetchone()
         return role
 
+    def get_role(self, username):
+        """Fetch user role"""
+
+        sql = "SELECT role FROM users WHERE username = %s"
+        self.cursor.execute(sql, (username,))
+        role = self.cursor.fetchone()
+        return role
+
     def modify_user_role(self, new_role, user_id):
         """modify a user role"""
 
