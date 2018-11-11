@@ -54,15 +54,13 @@ class Sale(Resource):
         if product_quantity <= product_min_quantity:
             return {'message': 'Product has reached the minimum quantity'}
 
-        # check if new quanity will below the min_quanity
-        if new_quantity < product_min_quantity:
-            return {'message': 'Product quantity will go below \
-            the minimum quantity allowed'}
-
         # check if inventory quantity is not enough
         if int(quantity) > product_quantity:
-            return {'message': 'Product quantity is more than available \
-            inventory quantity '}
+            return {'message': 'Product quantity is more than available inventory quantity'}
+        
+        # check if new quanity will below the min_quanity
+        if new_quantity < product_min_quantity:
+            return {'message': 'Product quantity will go below the minimum quantity allowed'}
 
         new_sales = Sales()
         sql = new_sales.create_sales()
